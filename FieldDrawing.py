@@ -4,10 +4,11 @@ from tkinter import *
 
 
 class FieldDrawing:
-    def __init__(self, field, cell_size):
+    def __init__(self, field, cell_size, window):
         self.map = field
         self.cell_size = cell_size
         self.canvas = None
+        self.window = window
 
     def draw_field(self):
         width = len(self.map[0])
@@ -16,17 +17,18 @@ class FieldDrawing:
         canvas_width = width * self.cell_size
         canvas_height = height * self.cell_size
 
-        Window.config(
+        self.window.config(
                     width=canvas_width,
                     height=canvas_height
         )
 
-        Window.resizable(
+        self.window.resizable(
                        width=False,
                        height=False
                          )
 
-        self.canvas = Canvas(Window,
+        self.canvas = Canvas(
+                             self.window,
                              width=canvas_width,
                              height=canvas_height,
                              bg='black'
@@ -55,7 +57,8 @@ class FieldDrawing:
 
 
 if __name__ == '__main__':
+
     field = Field()
-    m = FieldDrawing(field.map, 20)
+    m = FieldDrawing(field.map, 20, Window)
     m.draw_field()
-    Window.mainloop()
+    m.window.mainloop()
