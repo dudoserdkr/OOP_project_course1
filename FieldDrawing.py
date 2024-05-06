@@ -3,9 +3,9 @@ from Window import Window
 from tkinter import *
 
 
-class FieldDrawing(Field):
-    def __init__(self, cell_size):
-        super().__init__()
+class FieldDrawing:
+    def __init__(self, field, cell_size):
+        self.map = field
         self.cell_size = cell_size
         self.canvas = None
 
@@ -53,7 +53,9 @@ class FieldDrawing(Field):
                 )
         self.canvas.pack()
 
+
 if __name__ == '__main__':
-    m = FieldDrawing(20)
+    field = Field()
+    m = FieldDrawing(field.map, 20)
     m.draw_field()
     Window.mainloop()
