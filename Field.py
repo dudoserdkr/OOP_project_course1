@@ -1,5 +1,4 @@
-from PacMan import PacMan
-
+   # Can't imporn PacMan
 
 class Field:
     def __init__(self):
@@ -36,10 +35,3 @@ class Field:
             [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],  # 29
             [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],  # 30
         ]
-
-    def approve_move(self, pacman, x, y):
-        # тре додати виключення через кастом класи
-        if self.map[x][y] == 0:
-            pacman.position = (x, y)
-            return True
-        return False
