@@ -19,6 +19,10 @@ class VisualPacMan(PacMan):
         self.pacman_photo = None
         self.id = self.create_pacman()
 
+        self.is_moving = False
+        self.current_move_proces = None
+        self.moving_proces_id = None
+
     def create_pacman(self):
         image = self.left_pacman  # TODO: change picture
         resized_image = image.resize((CELL_SIZE, CELL_SIZE), Image.Resampling.LANCZOS)
@@ -27,33 +31,64 @@ class VisualPacMan(PacMan):
 
         return id
 
-    def move_up(self, event):
+    def move_up(self, event,  skip_first_if=False):
+        if self.is_moving and self.current_move_proces == "vp.move_up" and not skip_first_if:
+            return
         if self.can_move_up():
+            self.stop_moving()
+            self.is_moving = True
+            self.current_move_proces = "vp.move_up"
+
             self.canvas.move(self.id, 0, -CELL_SIZE)
             self.position[0] -= 1
-            Window.after(DELAY, lambda: self.move_up(event))
+            self.moving_proces_id = Window.after(DELAY, lambda: self.move_up(event, True))
+
         return
 
-    def move_down(self, event):
+    def move_down(self, event, skip_first_if=False):
+        if self.is_moving and self.current_move_proces == "vp.move_down" and not skip_first_if:
+            return
         if self.can_move_down():
+            self.stop_moving()
+            self.is_moving = True
+            self.current_move_proces = "self.move_down"
+
             self.canvas.move(self.id, 0, CELL_SIZE)
             self.position[0] += 1
-            Window.after(DELAY, lambda: self.move_down(event))
+            self.moving_proces_id = Window.after(DELAY, lambda: self.move_down(event, True))
         return
 
-    def move_right(self, event):
+    def move_right(self, event, skip_first_if=False):
+        if self.is_moving and self.current_move_proces == "self.move_right" and not skip_first_if:
+            return
         if self.can_move_right():
+            self.stop_moving()
+            self.is_moving = True
+            self.current_move_proces = "self.move_right"
+
             self.canvas.move(self.id, CELL_SIZE, 0)
             self.position[1] += 1
-            Window.after(DELAY, lambda: self.move_right(event))
+            self.moving_proces_id = Window.after(DELAY, lambda: self.move_right(event, True))
         return
 
-    def move_left(self, event):
+    def move_left(self, event, skip_first_if=False):
+        if self.is_moving and self.current_move_proces == "self.move_left" and not skip_first_if:
+            return
         if self.can_move_left():
+            self.stop_moving()
+            self.is_moving = True
+            self.current_move_proces = "self.move_left"
+
             self.canvas.move(self.id, -CELL_SIZE, 0)
             self.position[1] -= 1
-            Window.after(DELAY, lambda: self.move_left(event))  # TODO: DELAY * self.speed
+            self.moving_proces_id = Window.after(DELAY, lambda: self.move_left(event, True))  # TODO: DELAY * self.speed
         return
+
+    def stop_moving(self):
+        self.is_moving = False
+        self.current_move_proces = None
+        if self.moving_proces_id is not None:
+            self.canvas.after_cancel(self.moving_proces_id)
 
 if __name__ == "__main__":
     m = FieldDrawing(FIELD)
