@@ -34,3 +34,9 @@ FIELD = [
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],  # 29
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],  # 30
 ]
+
+
+FIELD_WIDTH, FIELD_HEIGHT = len(FIELD[0]), len(FIELD)
+
+PACMAN_START_POS = [23, 13]  # FIELD[23][13] - Cell where is packman spawning
+GHOST_START_POS = None  # Ghost in progress
