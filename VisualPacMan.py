@@ -13,11 +13,13 @@ from Canvas import CANVAS
 class VisualPacMan(PacMan):
     def __init__(self):
         super().__init__()
+        # self.absolut_speed = DELAY / self.speed
         self.canvas_position = [13 * CELL_SIZE, 23 * CELL_SIZE]
         self.left_pacman = Image.open("pictures/PacMan_left.png")
         self.canvas = CANVAS
         self.pacman_photo = None
         self.id = self.create_pacman()
+
 
         self.is_moving = False
         self.current_move_proces = None
@@ -81,7 +83,7 @@ class VisualPacMan(PacMan):
 
             self.canvas.move(self.id, -CELL_SIZE, 0)
             self.position[1] -= 1
-            self.moving_proces_id = Window.after(DELAY, lambda: self.move_left(event, True))  # TODO: DELAY * self.speed
+            self.moving_proces_id = Window.after(DELAY, lambda: self.move_left(event, True))  # TODO: DELAY / self.speed
         return
 
     def stop_moving(self):
