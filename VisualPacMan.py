@@ -32,12 +32,12 @@ class VisualPacMan(PacMan):
         return id
 
     def move_up(self, event,  skip_first_if=False):
-        if self.is_moving and self.current_move_proces == "vp.move_up" and not skip_first_if:
+        if self.is_moving and self.current_move_proces == "up" and not skip_first_if:
             return
         if self.can_move_up():
             self.stop_moving()
             self.is_moving = True
-            self.current_move_proces = "vp.move_up"
+            self.current_move_proces = "up"
 
             self.canvas.move(self.id, 0, -CELL_SIZE)
             self.position[0] -= 1
@@ -46,12 +46,12 @@ class VisualPacMan(PacMan):
         return
 
     def move_down(self, event, skip_first_if=False):
-        if self.is_moving and self.current_move_proces == "vp.move_down" and not skip_first_if:
+        if self.is_moving and self.current_move_proces == "down" and not skip_first_if:
             return
         if self.can_move_down():
             self.stop_moving()
             self.is_moving = True
-            self.current_move_proces = "self.move_down"
+            self.current_move_proces = "down"
 
             self.canvas.move(self.id, 0, CELL_SIZE)
             self.position[0] += 1
@@ -59,12 +59,12 @@ class VisualPacMan(PacMan):
         return
 
     def move_right(self, event, skip_first_if=False):
-        if self.is_moving and self.current_move_proces == "self.move_right" and not skip_first_if:
+        if self.is_moving and self.current_move_proces == "right" and not skip_first_if:
             return
         if self.can_move_right():
             self.stop_moving()
             self.is_moving = True
-            self.current_move_proces = "self.move_right"
+            self.current_move_proces = "right"
 
             self.canvas.move(self.id, CELL_SIZE, 0)
             self.position[1] += 1
@@ -72,12 +72,12 @@ class VisualPacMan(PacMan):
         return
 
     def move_left(self, event, skip_first_if=False):
-        if self.is_moving and self.current_move_proces == "self.move_left" and not skip_first_if:
+        if self.is_moving and self.current_move_proces == "left" and not skip_first_if:
             return
         if self.can_move_left():
             self.stop_moving()
             self.is_moving = True
-            self.current_move_proces = "self.move_left"
+            self.current_move_proces = "left"
 
             self.canvas.move(self.id, -CELL_SIZE, 0)
             self.position[1] -= 1
