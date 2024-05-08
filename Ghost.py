@@ -1,11 +1,9 @@
-from Object import Object
-from Field import Field
 from Window import Window
 from FieldDrawing import FieldDrawing
 import random
 
 
-class Ghost(Object):
+class Ghost:
     def __init__(self, position, pic_right_1, pic_right_2, pic_left_1, pic_left_2, pic_up_1,  pic_up_2, pic_down_1, pic_down_2):
         self.FUCKING_EXIT1 = (14, 21)
         self.FUCKING_EXIT2 = (15, 21)
@@ -183,3 +181,4 @@ class Ghost(Object):
                self.move_regime_predator(pacman)
         else:
             self.move_regime_random(pacman)
+            
