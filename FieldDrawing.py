@@ -1,19 +1,24 @@
-from Field import Field
-from Window import Window
 from tkinter import *
+
+from Field import FIELD
+from Window import Window
+
+from Canvas import CANVAS
+
+from constants import CELL_SIZE
 
 
 class FieldDrawing:
-    def __init__(self, field, cell_size, window):
+    def __init__(self, field):
         self.map = field
-        self.cell_size = cell_size
-        self.canvas = None
-        self.window = window
+        self.cell_size = CELL_SIZE
+        self.canvas = CANVAS
 
     def draw_field(self):
         width = len(self.map[0])
         height = len(self.map)
 
+<<<<<<< HEAD
         canvas_width = width * self.cell_size
         canvas_height = height * self.cell_size
 
@@ -34,6 +39,8 @@ class FieldDrawing:
                              bg='black'
                              )
 
+=======
+>>>>>>> a80b6293835f8af50c82b1a27faa9bbd6c490828
         color = ''
 
         for i in range(height):
@@ -57,8 +64,14 @@ class FieldDrawing:
 
 
 if __name__ == '__main__':
+<<<<<<< HEAD
 
     field = Field()
     m = FieldDrawing(field.map, 20, Window)
     m.draw_field()
     m.window.mainloop()
+=======
+    m = FieldDrawing(FIELD)
+    m.draw_field()
+    # Window.mainloop()
+>>>>>>> a80b6293835f8af50c82b1a27faa9bbd6c490828
