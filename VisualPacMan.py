@@ -20,7 +20,6 @@ class VisualPacMan(PacMan):
         self.pacman_photo = None
         self.id = self.create_pacman()
 
-
         self.is_moving = False
         self.current_move_proces = None
         self.moving_proces_id = None
