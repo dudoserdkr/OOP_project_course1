@@ -5,7 +5,7 @@ from PacMan import PacMan
 from FieldDrawing import FieldDrawing
 
 from Window import Window
-from Field import FIELD, PACMAN_START_POS
+from Field import FIELD
 from constants import CELL_SIZE, DELAY
 from Canvas import CANVAS
 
@@ -14,28 +14,23 @@ class VisualPacMan(PacMan):
     def __init__(self):
         super().__init__()
         # self.absolut_speed = DELAY / self.speed
-
+        self.canvas_position = [13 * CELL_SIZE, 23 * CELL_SIZE]
         self.left_pacman = Image.open("pictures/PacMan_left.png")
+        self.canvas = CANVAS
+        self.pacman_photo = None
         self.id = self.create_pacman()
 
-        self.canvas_position = [
-            pacman_start_coord * CELL_SIZE for pacman_start_coord in PACMAN_START_POS
-        ]
-        self.canvas = CANVAS
-
         self.is_moving = False
-
-        self.pacman_photo = None
         self.current_move_proces = None
         self.moving_proces_id = None
-
 
     def create_pacman(self):
         image = self.left_pacman  # TODO: change picture
         resized_image = image.resize((CELL_SIZE, CELL_SIZE), Image.Resampling.LANCZOS)
         self.pacman_photo = ImageTk.PhotoImage(resized_image)
+        id = self.canvas.create_image(self.canvas_position[0] + 10, self.canvas_position[1] + 10, image=self.pacman_photo)
 
-        return self.canvas.create_image(self.canvas_position[0] + 10, self.canvas_position[1] + 10, image=self.pacman_photo)
+        return id
 
     def move_up(self, event,  skip_first_if=False):
         if self.is_moving and self.current_move_proces == "up" and not skip_first_if:
