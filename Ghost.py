@@ -20,7 +20,7 @@ class Ghost:
 
     def move_left(self, map):
         (curr_y, curr_x) = self.position
-        if map[curr_y + 1][curr_x] == 1: #self.map is wrong
+        if map[curr_y + 1][curr_x] == 1: # self.map is wrong
             return
         self.position[0] += 1
         self.data_of_last_move = 1
@@ -94,6 +94,7 @@ class Ghost:
         if self.data_of_last_move in list_of_possibilities:
             list_of_possibilities.remove(self.data_of_last_move)
             return list_of_possibilities
+
     def move_regime_random(self, map):
         list_of_possibilities = self.possibilities_list_maker(map)
         number_vector = random.choice(list_of_possibilities)
@@ -171,8 +172,8 @@ class Ghost:
             self.move_down()
             self.drawer()
 
-    def move_regime_chooser(self, pacman): #here we find length between pacman and ghost, if this length is too short, ghost switches to regime of predator
-        x = pacman.position[0] #we build a 90gr. triangle
+    def move_regime_chooser(self, pacman): # here we find length between pacman and ghost, if this length is too short, ghost switches to regime of predator
+        x = pacman.position[0] # we build a 90gr. triangle
         y = self.position[1]
         katet1 = ((pacman.position[1] - y) ** 2) ** 0.5 #length
         katet2 = ((self.position[0] - x) ** 2) ** 0.5
