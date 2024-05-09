@@ -90,7 +90,7 @@ class VisualPacMan(PacMan):
         self.current_move_proces = None
         if self.moving_proces_id is not None:
             self.canvas.after_cancel(self.moving_proces_id)
-
+git 
 if __name__ == "__main__":
     m = FieldDrawing(FIELD)
     m.draw_field()
