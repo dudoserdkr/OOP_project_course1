@@ -1,0 +1,2 @@
+CELL_SIZE = 20
+DELAY = 500
