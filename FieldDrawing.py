@@ -43,4 +43,4 @@ class FieldDrawing:
 if __name__ == '__main__':
     m = FieldDrawing(FIELD)
     m.draw_field()
-    # Window.mainloop()
+    Window.mainloop()
