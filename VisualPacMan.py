@@ -71,23 +71,10 @@ class VisualPacMan(PacMan):
             self.canvas.itemconfig(self.id, image=self.up_open)
             # self.canvas.move(self.id, 0, -CELL_SIZE)
             # self.position[0] -= 1
-            self.slow_up(event)
+            # self.slow_up(event)
+            self.smooth_move(dx=0, dy=-ANIMATION_STEP_SIZE)
             self.moving_proces_id = Window.after(DELAY, lambda: self.move_up(event, True))
         return
-
-    def slow_up(self, event, counter=0):
-        if counter > 9:
-            return
-
-        self.canvas.move(self.id, 0, - ANIMATION_STEP_SIZE)
-
-        if self.is_even(counter):
-            self.canvas.itemconfig(self.id, image=self.sprite_dict[self.current_move_proces]["open"])
-        else:
-            self.canvas.itemconfig(self.id, image=self.sprite_dict[self.current_move_proces]["closed"])
-
-        counter += 1
-        Window.after(self.animation_delay, lambda: self.slow_up(event, counter))
 
     def move_down(self, event, skip_first_if=False):
         if self.is_moving and self.current_move_proces == "down" and not skip_first_if:
@@ -97,25 +84,10 @@ class VisualPacMan(PacMan):
             self.is_moving = True
             self.current_move_proces = "down"
             self.canvas.itemconfig(self.id, image=self.down_open)
-            # self.canvas.move(self.id, 0, CELL_SIZE)
-            # self.position[0] += 1
-            self.slow_down(event)
+
+            self.smooth_move(dx=0, dy=ANIMATION_STEP_SIZE)
             self.moving_proces_id = Window.after(DELAY, lambda: self.move_down(event, True))
         return
-
-    def slow_down(self, event, counter=0):
-        if counter > 9:
-            return
-
-        self.canvas.move(self.id, 0, ANIMATION_STEP_SIZE)
-
-        if self.is_even(counter):
-            self.canvas.itemconfig(self.id, image=self.sprite_dict[self.current_move_proces]["open"])
-        else:
-            self.canvas.itemconfig(self.id, image=self.sprite_dict[self.current_move_proces]["closed"])
-
-        counter += 1
-        Window.after(self.animation_delay, lambda: self.slow_down(event, counter))
 
     def move_right(self, event, skip_first_if=False):
         if self.is_moving and self.current_move_proces == "right" and not skip_first_if:
@@ -125,25 +97,10 @@ class VisualPacMan(PacMan):
             self.is_moving = True
             self.current_move_proces = "right"
             self.canvas.itemconfig(self.id, image=self.right_open)
-            # self.canvas.move(self.id, CELL_SIZE, 0)
-            # self.position[1] += 1
-            self.slow_right(event)
+
+            self.smooth_move(dx=ANIMATION_STEP_SIZE, dy=0)
             self.moving_proces_id = Window.after(DELAY, lambda: self.move_right(event, True))
         return
-
-    def slow_right(self, event, counter=0):
-        if counter > 9:
-            return
-
-        self.canvas.move(self.id, ANIMATION_STEP_SIZE, 0)
-
-        if self.is_even(counter):
-            self.canvas.itemconfig(self.id, image=self.sprite_dict[self.current_move_proces]["open"])
-        else:
-            self.canvas.itemconfig(self.id, image=self.sprite_dict[self.current_move_proces]["closed"])
-
-        counter += 1
-        Window.after(self.animation_delay, lambda: self.slow_right(event, counter))
 
     def move_left(self, event, skip_first_if=False):
         if self.is_moving and self.current_move_proces == "left" and not skip_first_if:
@@ -155,15 +112,16 @@ class VisualPacMan(PacMan):
             self.canvas.itemconfig(self.id, image=self.left_open)
             # self.canvas.move(self.id, -CELL_SIZE, 0)
             # self.position[1] -= 1
-            self.slow_left(event)
+            # self.slow_left(event)
+            self.smooth_move(dx=-ANIMATION_STEP_SIZE, dy=0)
             self.moving_proces_id = Window.after(DELAY, lambda: self.move_left(event, True))  # TODO: DELAY / self.speed
         return
 
-    def slow_left(self, event, counter=0):
+    def smooth_move(self, dx, dy, counter=0):
         if counter > 9:
             return
 
-        self.canvas.move(self.id, -ANIMATION_STEP_SIZE, 0)  # step = ANIMATION_STEP_SIZE == CELL_SIZE // 10
+        self.canvas.move(self.id, dx, dy)
 
         if self.is_even(counter):
             self.canvas.itemconfig(self.id, image=self.sprite_dict[self.current_move_proces]["open"])
@@ -171,7 +129,7 @@ class VisualPacMan(PacMan):
             self.canvas.itemconfig(self.id, image=self.sprite_dict[self.current_move_proces]["closed"])
 
         counter += 1
-        Window.after(self.animation_delay, lambda: self.slow_left(event, counter))
+        Window.after(self.animation_delay, lambda: self.smooth_move(dx, dy, counter))
 
     def stop_moving(self):
         self.is_moving = False
