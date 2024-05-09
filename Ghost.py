@@ -181,4 +181,3 @@ class Ghost:
                self.move_regime_predator(pacman)
         else:
             self.move_regime_random(pacman)
-            
