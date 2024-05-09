@@ -6,37 +6,30 @@ from Window import Window
 from constants import CELL_SIZE
 
 
-class Canvas:
-    def __init__(self, field):
-        self.map = field
-        self.cell_size = CELL_SIZE
-        self.canvas = self.init_canvas()
-        self.canvas.pack(fill=tk.BOTH, expand=True)
+def create_canvas(window, field_width, field_height) -> tk.Canvas:
+    window.config(
+        width=field_width,
+        height=field_height
+    )
 
-    def init_canvas(self):
-        width = len(self.map[0])
-        height = len(self.map)
+    window.resizable(
+        width=False,
+        height=False
+    )
 
-        canvas_width = width * self.cell_size
-        canvas_height = height * self.cell_size
+    canvas = tk.Canvas(
+        window,
+        width=field_width,
+        height=field_height,
+        bg='black'
+    )
+    canvas.pack(fill=tk.BOTH, expand=True)
 
-        Window.config(
-            width=canvas_width,
-            height=canvas_height
-        )
-
-        Window.resizable(
-            width=False,
-            height=False
-        )git
-
-        canvas = tk.Canvas(Window,
-                        width=canvas_width,
-                        height=canvas_height,
-                        bg='black')
-        return canvas
+    return canvas
 
 
-CANVAS = Canvas(FIELD).canvas
+field_width = len(FIELD[0]) * CELL_SIZE
+field_height = len(FIELD) * CELL_SIZE
 
 
+CANVAS = create_canvas(Window, field_width, field_height)

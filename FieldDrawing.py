@@ -18,29 +18,6 @@ class FieldDrawing:
         width = len(self.map[0])
         height = len(self.map)
 
-<<<<<<< HEAD
-        canvas_width = width * self.cell_size
-        canvas_height = height * self.cell_size
-
-        self.window.config(
-                    width=canvas_width,
-                    height=canvas_height
-        )
-
-        self.window.resizable(
-                       width=False,
-                       height=False
-                         )
-
-        self.canvas = Canvas(
-                             self.window,
-                             width=canvas_width,
-                             height=canvas_height,
-                             bg='black'
-                             )
-
-=======
->>>>>>> a80b6293835f8af50c82b1a27faa9bbd6c490828
         color = ''
 
         for i in range(height):
@@ -64,14 +41,6 @@ class FieldDrawing:
 
 
 if __name__ == '__main__':
-<<<<<<< HEAD
-
-    field = Field()
-    m = FieldDrawing(field.map, 20, Window)
-    m.draw_field()
-    m.window.mainloop()
-=======
     m = FieldDrawing(FIELD)
     m.draw_field()
-    # Window.mainloop()
->>>>>>> a80b6293835f8af50c82b1a27faa9bbd6c490828
+    Window.mainloop()
