@@ -5,7 +5,7 @@ from PacMan import PacMan
 from FieldDrawing import FieldDrawing
 
 from Window import Window
-from Field import FIELD
+from Field import FIELD, SPECIAL_POS_1, SPECIAL_POS_2
 from constants import CELL_SIZE, DELAY, ANIMATION_STEP, ANIMATION_STEP_SIZE
 from Canvas import CANVAS
 
@@ -99,6 +99,7 @@ class VisualPacMan(PacMan):
             self.canvas.itemconfig(self.id, image=self.right_open)
 
             self.smooth_move(dx=ANIMATION_STEP_SIZE, dy=0)
+            self.check_special_positions()
             self.moving_proces_id = Window.after(DELAY, lambda: self.move_right(event, True))
         return
 
@@ -110,9 +111,8 @@ class VisualPacMan(PacMan):
             self.is_moving = True
             self.current_move_proces = "left"
             self.canvas.itemconfig(self.id, image=self.left_open)
-            # self.canvas.move(self.id, -CELL_SIZE, 0)
-            # self.position[1] -= 1
-            # self.slow_left(event)
+
+            self.check_special_positions()
             self.smooth_move(dx=-ANIMATION_STEP_SIZE, dy=0)
             self.moving_proces_id = Window.after(DELAY, lambda: self.move_left(event, True))  # TODO: DELAY / self.speed
         return
@@ -136,6 +136,18 @@ class VisualPacMan(PacMan):
         self.current_move_proces = None
         if self.moving_proces_id is not None:
             self.canvas.after_cancel(self.moving_proces_id)
+
+    def check_special_positions(self):  # TODO: refactor, refactor, refactor
+        if self.position == SPECIAL_POS_1:
+            self.canvas.move(self.id, -25 * CELL_SIZE, 0)
+            self.position[0], self.position[1] = SPECIAL_POS_2[0], SPECIAL_POS_2[1] + 2
+            print(self.position)
+        elif self.position == SPECIAL_POS_2:
+            self.canvas.move(self.id, 25 * CELL_SIZE, 0)
+            self.position[0], self.position[1] = SPECIAL_POS_1[0], SPECIAL_POS_1[1] - 2
+            print(self.position)
+        return
+
 
 if __name__ == "__main__":
     m = FieldDrawing(FIELD)

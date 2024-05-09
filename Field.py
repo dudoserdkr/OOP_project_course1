@@ -40,3 +40,6 @@ FIELD_WIDTH, FIELD_HEIGHT = len(FIELD[0]), len(FIELD)
 
 PACMAN_START_POS = [23, 13]  # FIELD[23][13] - Cell where is packman spawning
 GHOST_START_POS = None  # Ghost in progress
+
+SPECIAL_POS_1 = [14, len(FIELD[0]) - 1]
+SPECIAL_POS_2 = [14, 0]
