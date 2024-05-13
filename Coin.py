@@ -23,9 +23,9 @@ class Coin:
         self.id = None
 
     def draw(self):
-        if Coin.COIN_STATUS == True:
-            self.id = CANVAS.create_image(self.coin_position[0] + 10, self.coin_position[1] + 10, image=self.resized)
-        return
+
+        self.id = CANVAS.create_image(self.coin_position[0] + 10, self.coin_position[1] + 10, image=self.resized)
+
 
     def delete(self):
         CANVAS.delete(self.id)
