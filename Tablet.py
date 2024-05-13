@@ -21,9 +21,33 @@ class Tablet(Coin):
         self.position = [position[1], position[0]]  # МАТЕМАТИЧНА ПОЗИЦІЯ
         self.score_counter = 0
         self.id = None
+        self._observers = []
+        self.TABLET_STATUS = True
 
     def draw(self):
         self.id = CANVAS.create_image(self.tablet_position[0] + 10, self.tablet_position[1] + 10, image=self.resized)
+
+    def register_observer(self, observer):
+        if observer not in self.observers:
+            self.observers.append(observer)
+            observer.update_score(Coin.SCORE)
+            print("registered observer")
+    def unregister_observer(self, observer):
+        self._observers.remove(observer)
+
+    def notify_observers(self):
+        for observer in self.observers:
+            observer.update_score(Coin.SCORE)
+            print("notified observers")
+
+    def change_status(self, pacman):
+
+        if pacman.position == self.position and self.TABLET_STATUS:
+            self.TABLET_STATUS = False  # Змінюємо статус на "неактивна"
+            #self.delete()  # Видаляємо монетку з ігрового поля
+            Coin.SCORE += 50  # Збільшуємо рахунок
+            self.notify_observers()
+            self.delete()
 
 
 def coin_check(pacman, coin_list):
