@@ -1,61 +1,76 @@
 from tkinter import *
 from PIL import ImageTk, Image
-
+from VisualPacMan import VisualPacMan
 from Canvas import CANVAS
 from Window import Window
 from Field import FIELD
-from FieldDrawing import FieldDrawing#
+from FieldDrawing import FieldDrawing
 from Canvas import CANVAS
+from constants import DELAY, CELL_SIZE
 
 
 class Coin:
     COIN_STATUS = True
     CELL_SIZE = 5
+    SCORE = 0
 
     #CANVAS_POSITION = [13 * 20, 23 * 20]
     def __init__(self, position):
         self.picture = Image.open("pictures/quadratico.png ")
-        self.coin_position = [position[0] * 20, position[1] * 20]
-        self.score_counter = 0
+        self.resized = ImageTk.PhotoImage(self.picture.resize((Coin.CELL_SIZE, Coin.CELL_SIZE), Image.Resampling.LANCZOS))
+        self.coin_position = [position[0] * CELL_SIZE, position[1] * CELL_SIZE]
+        self.position = [position[1], position[0]]  # МАТЕМАТИЧНА ПОЗИЦІЯ
+
+        self.COIN_STATUS = True
+        self.id = None
+        self.observers = []
+
     def draw(self):
-        if Coin.COIN_STATUS == True:
-            image = self.picture
-            resized_image = image.resize((Coin.CELL_SIZE , Coin.CELL_SIZE ), Image.Resampling.LANCZOS)
-            self.coin_picture = ImageTk.PhotoImage(resized_image)
-            id = CANVAS.create_image(self.coin_position[0] + 10, self.coin_position[1] + 10,
-                                     image=self.coin_picture)
-            return id
 
-        return id
+        self.id = CANVAS.create_image(self.coin_position[0] + 10, self.coin_position[1] + 10, image=self.resized)
+
+
+    def delete(self):
+        CANVAS.delete(self.id)
+
+    def register_observer(self, observer):
+        if observer not in self.observers:
+            self.observers.append(observer)
+            observer.update_score(Coin.SCORE)
+            print ("registered observer")
+
+    def unregister_observer(self, observer):
+        self.observers.remove(observer)
+
+    def notify_observers(self):
+        for observer in self.observers:
+            observer.update_score(Coin.SCORE)
+            print ("notified observers")
+
+
+
+    def status(self):
+        if not self.COIN_STATUS:
+            self.notify_observers()
+
     def change_status(self, pacman):
-        if pacman.position == self.coin_position:
-            Coin.COIN_STATUS = False
-            self.score_counter += 10
 
-
-if __name__ == "__main__":
-    m = FieldDrawing(FIELD)
-    m.draw_field()
-    #c = Coin((1, 1) )
-    #c.draw()
-    #Window.mainloop()
-
-
-    ex = []
-    for i in range(0, 28):
-        for e in range(0, 30):
-            c = Coin((i, e))
-            if FIELD[e][i] == 0 and not (20 > e > 8 and 21 > i > 6):
-                #c.draw()
-                ex.append(c)
-    for t in ex:
-        t.draw()
-    Window.mainloop()
+        if pacman.position == self.position and self.COIN_STATUS:
+            self.COIN_STATUS = False  # Змінюємо статус на "неактивна"
+            #self.delete()  # Видаляємо монетку з ігрового поля
+            Coin.SCORE += 10  # Збільшуємо рахунок
+            self.notify_observers()
+            self.delete()
 
 
 
+def coin_check(pacman, coin_list):
+    #print(f"Pacman {pacman.position}")
+    for coin in coin_list:
+        coin.change_status(pacman)
+        # print(f"Coin: {coin.position}")
 
-
+    Window.after(DELAY // 30, lambda: coin_check(pacman, coin_list))
 
 
 
