@@ -1,9 +1,9 @@
 from Field import FIELD, FIELD_WIDTH, FIELD_HEIGHT
 from copy import deepcopy
+from random import randint
 
 
 class Ghost:
-
     START_POSITION = (11, 14)
     SCARED = 0
     WALKING = 1
@@ -22,9 +22,38 @@ class Ghost:
         """
         self.field = FIELD
         self.position = self.START_POSITION
+        self.next_move = None
+        self.target_coords = None
 
         self.way_to_pacman = []
         self.condition = 1
+
+
+    # region walking
+
+    def walking(self):
+        pass
+
+    # endregion
+
+
+    # region Scared
+
+    def random_move(self) -> None:
+        curr_y, curr_x = self.position
+        possible_moves = list(self._ghost_possible_moves(curr_y, curr_x))
+        random_number = randint(0, len(possible_moves) - 1)
+        self.next_move = possible_moves[random_number]
+
+    # endregion
+
+    # In this region there are methods, needed to finding the shortet way to the pacman
+    # region Hunting
+
+    def build_way_to_pacman(self, pacman_y, pacman_x, pacman_direction=None) -> None:
+        tempory_board = self._find_way_to_pacman(pacman_y, pacman_x, pacman_direction)
+        self.way_to_pacman = self._rebuild_path(tempory_board, pacman_y, pacman_x)
+        self.next_move = self.way_to_pacman.pop(0)
 
     def _ghost_possible_moves(self, y: int, x: int):
         """
@@ -41,11 +70,11 @@ class Ghost:
         for dy, dx in deltas:
             new_y, new_x = y + dy, x + dx
 
-            if 0 <= new_y <= FIELD_WIDTH and 0 <= new_x <= FIELD_HEIGHT:
+            if 0 <= self.check_coordinates_validity(new_y, new_x):
                 if self.field[new_y][new_x] == 0 or self.field[new_y][new_x] == 2:
                     yield new_y, new_x
 
-    def _find_way_to_pacman(self, pacman_y: int, pacman_x: int) -> None or list[list]:
+    def _find_way_to_pacman(self, pacman_y: int, pacman_x: int, pacman_direction=None):
         """Finding the most shorter way to reach pacman by using bfs alg"""
 
         curr_y, curr_x = self.position
@@ -102,15 +131,33 @@ class Ghost:
             current_position = tempory_board[x][y]
 
         return rebuilded_path[::-1]
+    # endregion
 
-    def build_way_to_pacman(self, pacman_y, pacman_x) -> None:
-        tempory_board = self._find_way_to_pacman(pacman_y, pacman_x)
-        self.way_to_pacman = self._rebuild_path(tempory_board, pacman_y, pacman_x)
+    @staticmethod
+    def check_coordinates_validity(y, x):
+        return 0 <= y <= FIELD_WIDTH and 0 <= x <= FIELD_HEIGHT
+
+    @staticmethod
+    def _define_deltas(pacman_direction: str) -> tuple:
+        dx = dy = 0
+
+        if pacman_direction == 'Up':
+            dy, dx = 1, 0
+        elif pacman_direction == 'Down':
+            dy, dx = -1, 0
+        elif pacman_direction == 'Right':
+            dy, dx = 0, 1
+        elif pacman_direction == 'Left':
+            dy, dx = 0, -1
+
+        return dy, dx
 
 
 if __name__ == '__main__':
     ghost = Ghost()
     ghost.build_way_to_pacman(23, 11)
+    ghost.random_move()
+    print(ghost.next_move)
 
     print(ghost.way_to_pacman)
     # print(temp_field)
