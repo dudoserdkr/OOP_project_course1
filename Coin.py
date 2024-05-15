@@ -16,7 +16,7 @@ class Coin:
 
     #CANVAS_POSITION = [13 * 20, 23 * 20]
     def __init__(self, position):
-        self.picture = Image.open("pictures/quadratico.png ")
+        self.picture = Image.open("pictures/quadratico.png")
         self.resized = ImageTk.PhotoImage(self.picture.resize((Coin.CELL_SIZE, Coin.CELL_SIZE), Image.Resampling.LANCZOS))
         self.coin_position = [position[0] * CELL_SIZE, position[1] * CELL_SIZE]
         self.position = [position[1], position[0]]  # МАТЕМАТИЧНА ПОЗИЦІЯ

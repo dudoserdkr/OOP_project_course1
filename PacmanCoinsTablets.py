@@ -19,7 +19,6 @@ class PacmanCoinsTablets:
         self.tablet_list = []
 
     def coin_check(self, pacman, coin_list):
-        # print(f"Pacman {pacman.position}")
         for coin in coin_list:
             coin.change_status(pacman)
 
@@ -88,6 +87,5 @@ if __name__ == '__main__':
     total.tablet_drawer()
     total.score()
     total.pacman()
-
 
 
