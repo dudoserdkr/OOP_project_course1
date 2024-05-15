@@ -20,15 +20,12 @@ class Coin:
         self.resized = ImageTk.PhotoImage(self.picture.resize((Coin.CELL_SIZE, Coin.CELL_SIZE), Image.Resampling.LANCZOS))
         self.coin_position = [position[0] * CELL_SIZE, position[1] * CELL_SIZE]
         self.position = [position[1], position[0]]  # МАТЕМАТИЧНА ПОЗИЦІЯ
-
         self.COIN_STATUS = True
         self.id = None
         self.observers = []
 
     def draw(self):
-
         self.id = CANVAS.create_image(self.coin_position[0] + 10, self.coin_position[1] + 10, image=self.resized)
-
 
     def delete(self):
         CANVAS.delete(self.id)
@@ -37,7 +34,6 @@ class Coin:
         if observer not in self.observers:
             self.observers.append(observer)
             observer.update_score(Coin.SCORE)
-            print ("registered observer")
 
     def unregister_observer(self, observer):
         self.observers.remove(observer)
@@ -54,22 +50,18 @@ class Coin:
             self.notify_observers()
 
     def change_status(self, pacman):
-
         if pacman.position == self.position and self.COIN_STATUS:
-            self.COIN_STATUS = False  # Змінюємо статус на "неактивна"
-            #self.delete()  # Видаляємо монетку з ігрового поля
-            Coin.SCORE += 10  # Збільшуємо рахунок
+            self.COIN_STATUS = False
+            #self.delete()
+            Coin.SCORE += 10
             self.notify_observers()
             self.delete()
 
 
 
 def coin_check(pacman, coin_list):
-    #print(f"Pacman {pacman.position}")
     for coin in coin_list:
         coin.change_status(pacman)
-        # print(f"Coin: {coin.position}")
-
     Window.after(DELAY // 30, lambda: coin_check(pacman, coin_list))
 
 

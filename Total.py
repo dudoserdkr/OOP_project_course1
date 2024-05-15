@@ -72,6 +72,11 @@ if __name__ == "__main__":
     vp = VisualPacMan()
     coin_check(vp, ex)
     tablet_check(vp, nex)
+
+
+
+
+
     Window.bind('<Left>', vp.move_left)
     Window.bind('<Right>', vp.move_right)
     Window.bind('<Up>', vp.move_up)
