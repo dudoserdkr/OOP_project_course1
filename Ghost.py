@@ -1,6 +1,4 @@
-
-from Object import Object
-from Field import Field
+from Field import FIELD
 from Window import Window
 from FieldDrawing import FieldDrawing
 import random
