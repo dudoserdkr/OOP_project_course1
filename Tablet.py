@@ -38,7 +38,6 @@ class Tablet(Coin):
     def notify_observers(self):
         for observer in self.observers:
             observer.update_score(Coin.SCORE)
-            print("notified observers")
 
     def change_status(self, pacman):
 

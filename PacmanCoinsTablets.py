@@ -17,6 +17,7 @@ class PacmanCoinsTablets:
         self.fourth_tablet = Tablet([26, 23])
         self.coin_list = []
         self.tablet_list = []
+        self.score = Score()
 
     def coin_check(self, pacman, coin_list):
         for coin in coin_list:
@@ -47,6 +48,9 @@ class PacmanCoinsTablets:
                     self.coin_list.append(c)
         for t in self.coin_list:
             t.draw()
+    def score_coin(self):
+        for t in self.coin_list:
+            t.register_observer(self.score)
 
     def tablet_list_maker(self):
         self.tablet_list = []
@@ -62,12 +66,11 @@ class PacmanCoinsTablets:
         self.third_tablet.draw()
         self.fourth_tablet.draw()
 
-    def score(self):
-        score = Score()
-        self.first_tablet.register_observer(score)
-        self.second_tablet.register_observer(score)
-        self.third_tablet.register_observer(score)
-        self.fourth_tablet.register_observer(score)
+    def score_tablet(self):
+        self.first_tablet.register_observer(self.score)
+        self.second_tablet.register_observer(self.score)
+        self.third_tablet.register_observer(self.score)
+        self.fourth_tablet.register_observer(self.score)
 
     def pacman(self):
         vp = VisualPacMan()
@@ -85,7 +88,8 @@ if __name__ == '__main__':
     total.coin()
     total.tablet_list_maker()
     total.tablet_drawer()
-    total.score()
+    total.score_coin()
+    total.score_tablet()
     total.pacman()
 
 
