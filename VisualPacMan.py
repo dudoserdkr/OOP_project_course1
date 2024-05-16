@@ -44,10 +44,10 @@ class VisualPacMan(PacMan):
         return False
 
     def create_pacman(self):
-        image = self.initial_pacman  # TODO: change picture
+        image = self.initial_pacman
         resized_image = image.resize((CELL_SIZE, CELL_SIZE), Image.Resampling.LANCZOS)
         self.pacman_photo = ImageTk.PhotoImage(resized_image)
-        id = self.canvas.create_image(self.canvas_position[0] + 10, self.canvas_position[1] + 10, image=self.pacman_photo)
+        id = self.canvas.create_image(self.canvas_position[0] + CELL_SIZE / 2, self.canvas_position[1] + CELL_SIZE / 2, image=self.pacman_photo)  # TODO: change + 10 constant to cell_size / 2
 
         return id
 
@@ -131,9 +131,7 @@ class VisualPacMan(PacMan):
         counter += 1
         Window.after(self.animation_delay, lambda: self.smooth_move(dx, dy, counter))
 
-    def stop_moving(self):
-        self.is_moving = False
-        self.current_move_proces = None
+    def stop_moving(self):  # TODO delete is_moving, delete self.current_move_proces = None
         if self.moving_proces_id is not None:
             self.canvas.after_cancel(self.moving_proces_id)
 
@@ -148,6 +146,8 @@ class VisualPacMan(PacMan):
             print(self.position)
         return
 
+    def visual_death(self):  # TODO: death visualisation, teleportation to start position
+        ...
 
 if __name__ == "__main__":
     m = FieldDrawing(FIELD)

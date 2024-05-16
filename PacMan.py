@@ -7,7 +7,6 @@ class PacMan:
     PACMAN_CURRENT_STATUS = True  # current life True/False
     AVAILABLE_LIVES = 3
 
-
     def __init__(self):
         self.position = self.START_POS.copy()
 
