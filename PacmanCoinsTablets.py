@@ -5,6 +5,8 @@ from Window import Window
 from Field import FIELD
 from FieldDrawing import FieldDrawing
 from Score import Score
+from VisualScore import VisualScore
+import tkinter as tk
 
 
 class PacmanCoinsTablets:
@@ -22,18 +24,14 @@ class PacmanCoinsTablets:
     def coin_check(self, pacman, coin_list):
         for coin in coin_list:
             coin.change_status(pacman)
-
         Window.after(PacmanCoinsTablets.DELAY // 30, lambda: self.coin_check(pacman, coin_list))
 
     def tablet_check(self, pacman, tablet_list):
-        # print(f"Pacman {pacman.position}")
         for tablet in tablet_list:
             tablet.change_status(pacman)
-
         Window.after(PacmanCoinsTablets.DELAY // 30, lambda: self.tablet_check(pacman, tablet_list))
 
     @staticmethod
-
     def map():
         field = FieldDrawing(FIELD)
         field.draw_field()
@@ -42,12 +40,11 @@ class PacmanCoinsTablets:
         for i in range(0, 28):
             for e in range(0, 30):
                 c = Coin([i, e])
-                if FIELD[e][i] == 0 and not (20 > e > 8 and 21 > i > 6) and not (i == 1 and e == 3) and not (
-                        i == 1 and e == 23) and not (i == 26 and e == 3) and not (i == 26 and e == 23):
-
+                if FIELD[e][i] == 0 and not (20 > e > 8 and 21 > i > 6) and not (i == 1 and e == 3) and not (i == 1 and e == 23) and not (i == 26 and e == 3) and not (i == 26 and e == 23) and not (e == 14):
                     self.coin_list.append(c)
         for t in self.coin_list:
             t.draw()
+
     def score_coin(self):
         for t in self.coin_list:
             t.register_observer(self.score)
@@ -60,7 +57,6 @@ class PacmanCoinsTablets:
         self.tablet_list.append(self.fourth_tablet)
 
     def tablet_drawer(self):
-
         self.first_tablet.draw()
         self.second_tablet.draw()
         self.third_tablet.draw()
@@ -72,6 +68,11 @@ class PacmanCoinsTablets:
         self.third_tablet.register_observer(self.score)
         self.fourth_tablet.register_observer(self.score)
 
+    def scoreboard(self):
+        vs = VisualScore()
+        self.score.register_listener(vs)
+        return vs
+
     def pacman(self):
         vp = VisualPacMan()
         self.coin_check(vp, self.coin_list)
@@ -80,7 +81,7 @@ class PacmanCoinsTablets:
         Window.bind('<Right>', vp.move_right)
         Window.bind('<Up>', vp.move_up)
         Window.bind('<Down>', vp.move_down)
-        Window.mainloop()
+
 
 if __name__ == '__main__':
     total = PacmanCoinsTablets()
@@ -90,6 +91,10 @@ if __name__ == '__main__':
     total.tablet_drawer()
     total.score_coin()
     total.score_tablet()
+    total.scoreboard()
     total.pacman()
+    Window.mainloop()
+
+
 
 

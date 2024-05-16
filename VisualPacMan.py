@@ -131,7 +131,7 @@ class VisualPacMan(PacMan):
         counter += 1
         Window.after(self.animation_delay, lambda: self.smooth_move(dx, dy, counter))
 
-    def stop_moving(self):  # TODO delete is_moving, delete self.current_move_proces = None
+    def stop_moving(self):
         if self.moving_proces_id is not None:
             self.canvas.after_cancel(self.moving_proces_id)
 
@@ -146,8 +146,9 @@ class VisualPacMan(PacMan):
             print(self.position)
         return
 
-    def visual_death(self):  # TODO: death visualisation, teleportation to start position
-        ...
+    def visual_death(self, event):  # TODO: death visualisation, teleportation to start position
+        self.stop_moving()
+
 
 if __name__ == "__main__":
     m = FieldDrawing(FIELD)
@@ -157,4 +158,5 @@ if __name__ == "__main__":
     Window.bind('<Right>', vp.move_right)
     Window.bind('<Up>', vp.move_up)
     Window.bind('<Down>', vp.move_down)
+    # Window.bind('escape', vp.stop_moving)
     Window.mainloop()

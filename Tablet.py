@@ -31,7 +31,7 @@ class Tablet(Coin):
         if observer not in self.observers:
             self.observers.append(observer)
             observer.update_score(Coin.SCORE)
-            print("registered observer")
+            #print("registered observer")
     def unregister_observer(self, observer):
         self._observers.remove(observer)
 
