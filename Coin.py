@@ -41,7 +41,6 @@ class Coin:
     def notify_observers(self):
         for observer in self.observers:
             observer.update_score(Coin.SCORE)
-            print ("notified observers")
 
 
 
