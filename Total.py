@@ -1,17 +1,15 @@
 from Coin import Coin
 from Tablet import Tablet
 from VisualPacMan import VisualPacMan
-from Window import Window
-from Field import FIELD
 from FieldDrawing import FieldDrawing
 from Score import Score
 from VisualScore import VisualScore
-import tkinter as tk
+from Field import FIELD
 
+from Window import Window
 
-class PacmanCoinsTablets:
+class Total:
     DELAY = 30
-
     def __init__(self):
         self.first_tablet = Tablet([1, 3])
         self.second_tablet = Tablet([1, 23])
@@ -36,16 +34,6 @@ class PacmanCoinsTablets:
     def tablet_check(self, pacman):
         for tablet in self.tablet_list:
             tablet.change_status(pacman)
-
-    # def coin_check(self, pacman, coin_list):
-    #     for coin in coin_list:
-    #         coin.change_status(pacman)
-    #     Window.after(PacmanCoinsTablets.DELAY // 30, lambda: self.coin_check(pacman, coin_list))
-    #
-    # def tablet_check(self, pacman, tablet_list):
-    #     for tablet in tablet_list:
-    #         tablet.change_status(pacman)
-    #     Window.after(PacmanCoinsTablets.DELAY // 30, lambda: self.tablet_check(pacman, tablet_list))
 
     @staticmethod
     def map():
@@ -90,10 +78,6 @@ class PacmanCoinsTablets:
         return vs
 
     def pacman(self):
-        # vp = VisualPacMan()
-        # self.coin_check(vp, self.coin_list)
-        # self.tablet_check(vp, self.tablet_list)
-        # vp = VisualPacMan()
         self.coin_check(self.vp)
         self.tablet_check(self.vp)
         Window.bind('<Left>', self.vp.move_left)
@@ -101,19 +85,6 @@ class PacmanCoinsTablets:
         Window.bind('<Up>', self.vp.move_up)
         Window.bind('<Down>', self.vp.move_down)
 
-
-if __name__ == '__main__':
-    vp = VisualPacMan()
-    total = PacmanCoinsTablets()
-    total.map()
-    total.coin()
-    total.tablet_list_maker()
-    total.tablet_drawer()
-    total.score_coin()
-    total.score_tablet()
-    total.scoreboard()
-    total.pacman()
-    Window.mainloop()
 
 
 
