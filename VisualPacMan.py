@@ -26,6 +26,11 @@ class VisualPacMan(PacMan):
         self.left_open = ImageTk.PhotoImage(Image.open("pictures/pm_left_open.png").resize((CELL_SIZE, CELL_SIZE), Image.Resampling.LANCZOS))
         self.left_closed = ImageTk.PhotoImage(Image.open("pictures/pm_left_closed.png").resize((CELL_SIZE, CELL_SIZE), Image.Resampling.LANCZOS))
 
+        Window.bind('<Left>', self.move_left)
+        Window.bind('<Right>', self.move_right)
+        Window.bind('<Up>', self.move_up)
+        Window.bind('<Down>', self.move_down)
+
         self.sprite_dict = self.create_pacman_sprite_dict()
 
         self.pacman_photo = None
@@ -154,9 +159,6 @@ if __name__ == "__main__":
     m = FieldDrawing(FIELD)
     m.draw_field()
     vp = VisualPacMan()
-    Window.bind('<Left>', vp.move_left)
-    Window.bind('<Right>', vp.move_right)
-    Window.bind('<Up>', vp.move_up)
-    Window.bind('<Down>', vp.move_down)
+
     Window.bind('<Escape>', vp.visual_death)
     Window.mainloop()
