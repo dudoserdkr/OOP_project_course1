@@ -22,6 +22,7 @@ class PacmanCoinsTablets:
         self.score = Score()
 
         self.pacman_pos = None
+        self.map = self.map()
         self.vp = VisualPacMan()
 
     def get_pacman_pos(self, pacman):

@@ -30,15 +30,15 @@ if __name__ == '__main__':
     ob = Observer(total.vp)
     # Додали підписника який отримує інфу про позицію пакмана, подімна штука буде і з гостами
     ob + total
-
+    total.pacman()
     ob.main_loop()
 
-    total.map()
+    # total.map()
     total.coin()
     total.tablet_list_maker()
     total.tablet_drawer()
     total.score_coin()
     total.score_tablet()
     total.scoreboard()
-    total.pacman()
+
     Window.mainloop()
