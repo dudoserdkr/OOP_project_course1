@@ -47,7 +47,7 @@ class VisualPacMan(PacMan):
         image = self.initial_pacman
         resized_image = image.resize((CELL_SIZE, CELL_SIZE), Image.Resampling.LANCZOS)
         self.pacman_photo = ImageTk.PhotoImage(resized_image)
-        id = self.canvas.create_image(self.canvas_position[0] + CELL_SIZE / 2, self.canvas_position[1] + CELL_SIZE / 2, image=self.pacman_photo)  # TODO: change + 10 constant to cell_size / 2
+        id = self.canvas.create_image(self.canvas_position[0] + CELL_SIZE / 2, self.canvas_position[1] + CELL_SIZE / 2, image=self.pacman_photo)
 
         return id
 
@@ -69,9 +69,7 @@ class VisualPacMan(PacMan):
             self.is_moving = True
             self.current_move_proces = "up"
             self.canvas.itemconfig(self.id, image=self.up_open)
-            # self.canvas.move(self.id, 0, -CELL_SIZE)
-            # self.position[0] -= 1
-            # self.slow_up(event)
+
             self.smooth_move(dx=0, dy=-ANIMATION_STEP_SIZE)
             self.moving_proces_id = Window.after(DELAY, lambda: self.move_up(event, True))
         return
@@ -149,6 +147,8 @@ class VisualPacMan(PacMan):
     def visual_death(self, event):  # TODO: death visualisation, teleportation to start position
         self.stop_moving()
 
+        # self.current_move_proces = None
+
 
 if __name__ == "__main__":
     m = FieldDrawing(FIELD)
@@ -158,5 +158,5 @@ if __name__ == "__main__":
     Window.bind('<Right>', vp.move_right)
     Window.bind('<Up>', vp.move_up)
     Window.bind('<Down>', vp.move_down)
-    # Window.bind('escape', vp.stop_moving)
+    Window.bind('<Escape>', vp.visual_death)
     Window.mainloop()

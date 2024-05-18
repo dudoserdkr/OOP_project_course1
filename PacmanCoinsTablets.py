@@ -21,15 +21,30 @@ class PacmanCoinsTablets:
         self.tablet_list = []
         self.score = Score()
 
-    def coin_check(self, pacman, coin_list):
-        for coin in coin_list:
-            coin.change_status(pacman)
-        Window.after(PacmanCoinsTablets.DELAY // 30, lambda: self.coin_check(pacman, coin_list))
+        self.pacman_pos = None
+        self.vp = VisualPacMan()
 
-    def tablet_check(self, pacman, tablet_list):
-        for tablet in tablet_list:
+    def get_pacman_pos(self, pacman):
+        self.coin_check(pacman)
+        self.tablet_check(pacman)
+
+    def coin_check(self, pacman):
+        for coin in self.coin_list:
+            coin.change_status(pacman)
+
+    def tablet_check(self, pacman):
+        for tablet in self.tablet_list:
             tablet.change_status(pacman)
-        Window.after(PacmanCoinsTablets.DELAY // 30, lambda: self.tablet_check(pacman, tablet_list))
+
+    # def coin_check(self, pacman, coin_list):
+    #     for coin in coin_list:
+    #         coin.change_status(pacman)
+    #     Window.after(PacmanCoinsTablets.DELAY // 30, lambda: self.coin_check(pacman, coin_list))
+    #
+    # def tablet_check(self, pacman, tablet_list):
+    #     for tablet in tablet_list:
+    #         tablet.change_status(pacman)
+    #     Window.after(PacmanCoinsTablets.DELAY // 30, lambda: self.tablet_check(pacman, tablet_list))
 
     @staticmethod
     def map():
@@ -74,16 +89,20 @@ class PacmanCoinsTablets:
         return vs
 
     def pacman(self):
-        vp = VisualPacMan()
-        self.coin_check(vp, self.coin_list)
-        self.tablet_check(vp, self.tablet_list)
-        Window.bind('<Left>', vp.move_left)
-        Window.bind('<Right>', vp.move_right)
-        Window.bind('<Up>', vp.move_up)
-        Window.bind('<Down>', vp.move_down)
+        # vp = VisualPacMan()
+        # self.coin_check(vp, self.coin_list)
+        # self.tablet_check(vp, self.tablet_list)
+        # vp = VisualPacMan()
+        self.coin_check(self.vp)
+        self.tablet_check(self.vp)
+        Window.bind('<Left>', self.vp.move_left)
+        Window.bind('<Right>', self.vp.move_right)
+        Window.bind('<Up>', self.vp.move_up)
+        Window.bind('<Down>', self.vp.move_down)
 
 
 if __name__ == '__main__':
+    vp = VisualPacMan()
     total = PacmanCoinsTablets()
     total.map()
     total.coin()
