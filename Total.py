@@ -18,7 +18,6 @@ class Total:
         self.coin_list = []
         self.tablet_list = []
         self.score = Score()
-
         self.pacman_pos = None
         self.map = self.map()
         self.vp = VisualPacMan()
@@ -42,8 +41,8 @@ class Total:
 
     def coin(self):
         for i in range(0, 28):
-            for e in range(0, 30):
-                c = Coin([i, e])
+            for e in range(0, 30): # TODO: FIELD_HEIGHT, FIELD_WIDTH
+                c = Coin([i, e]) # TODO: make few strings for if instead of one
                 if FIELD[e][i] == 0 and not (20 > e > 8 and 21 > i > 6) and not (i == 1 and e == 3) and not (i == 1 and e == 23) and not (i == 26 and e == 3) and not (i == 26 and e == 23) and not (e == 14):
                     self.coin_list.append(c)
         for t in self.coin_list:
