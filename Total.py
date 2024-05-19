@@ -6,7 +6,6 @@ from Score import Score
 from VisualScore import VisualScore
 from Field import FIELD
 
-from Window import Window
 
 class Total:
     DELAY = 30
@@ -60,29 +59,20 @@ class Total:
         self.tablet_list.append(self.fourth_tablet)
 
     def tablet_drawer(self):
-        self.first_tablet.draw()
-        self.second_tablet.draw()
-        self.third_tablet.draw()
-        self.fourth_tablet.draw()
+        for tab in self.tablet_list:
+            tab.draw()
 
     def score_tablet(self):
-        self.first_tablet.register_observer(self.score)
-        self.second_tablet.register_observer(self.score)
-        self.third_tablet.register_observer(self.score)
-        self.fourth_tablet.register_observer(self.score)
+        for tab in self.tablet_list:
+            tab.register_observer(self.score)
 
     def scoreboard(self):
         vs = VisualScore()
         self.score.register_listener(vs)
-        return vs
 
     def pacman(self):
         self.coin_check(self.vp)
         self.tablet_check(self.vp)
-        Window.bind('<Left>', self.vp.move_left)
-        Window.bind('<Right>', self.vp.move_right)
-        Window.bind('<Up>', self.vp.move_up)
-        Window.bind('<Down>', self.vp.move_down)
 
 
 
