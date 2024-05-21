@@ -32,6 +32,8 @@ class VisualPacMan(PacMan):
         Window.bind('<Down>', self.move_down)
 
         self.sprite_dict = self.create_pacman_sprite_dict()
+        self.possibility_dict = {"up": self.can_move_up, "down": self.can_move_down,
+                                 "right": self.can_move_right, "left": self.can_move_left}
 
         self.pacman_photo = None
         self.id = self.create_pacman()
@@ -66,58 +68,42 @@ class VisualPacMan(PacMan):
 
         return sprite_dict
 
-    def move_up(self, event,  skip_first_if=False):
-        if self.is_moving and self.current_move_proces == "up" and not skip_first_if:
+    def move_up(self, event):
+        if self.is_moving and self.current_move_proces == "up":
             return
-        if self.can_move_up():
+        direction = "up"
+        visual_move_coordinates = [0, -ANIMATION_STEP_SIZE]
+        self.default_move(direction, visual_move_coordinates)
+
+    def move_down(self, event):
+        if self.is_moving and self.current_move_proces == "down":
+            return
+        direction = "down"
+        visual_move_coordinates = [0, ANIMATION_STEP_SIZE]
+        self.default_move(direction, visual_move_coordinates)
+
+    def move_right(self, event):
+        if self.is_moving and self.current_move_proces == "right":
+            return
+        direction = "right"
+        visual_move_coordinates = [ANIMATION_STEP_SIZE, 0]
+        self.default_move(direction, visual_move_coordinates)
+
+    def move_left(self, event):
+        if self.is_moving and self.current_move_proces == "left":
+            return
+        direction = "left"
+        visual_move_coordinates = [-ANIMATION_STEP_SIZE, 0]
+        self.default_move(direction, visual_move_coordinates)
+
+    def default_move(self, direction, visual_move_coordinates):
+        if self.possibility_dict[direction]():
             self.stop_moving()
             self.is_moving = True
-            self.current_move_proces = "up"
-            self.canvas.itemconfig(self.id, image=self.up_open)
+            self.current_move_proces = direction
 
-            self.smooth_move(dx=0, dy=-ANIMATION_STEP_SIZE)
-            self.moving_proces_id = Window.after(DELAY, lambda: self.move_up(event, True))
-        return
-
-    def move_down(self, event, skip_first_if=False):
-        if self.is_moving and self.current_move_proces == "down" and not skip_first_if:
-            return
-        if self.can_move_down():
-            self.stop_moving()
-            self.is_moving = True
-            self.current_move_proces = "down"
-            self.canvas.itemconfig(self.id, image=self.down_open)
-
-            self.smooth_move(dx=0, dy=ANIMATION_STEP_SIZE)
-            self.moving_proces_id = Window.after(DELAY, lambda: self.move_down(event, True))
-        return
-
-    def move_right(self, event, skip_first_if=False):
-        if self.is_moving and self.current_move_proces == "right" and not skip_first_if:
-            return
-        if self.can_move_right():
-            self.stop_moving()
-            self.is_moving = True
-            self.current_move_proces = "right"
-            self.canvas.itemconfig(self.id, image=self.right_open)
-
-            self.smooth_move(dx=ANIMATION_STEP_SIZE, dy=0)
-            self.check_special_positions()
-            self.moving_proces_id = Window.after(DELAY, lambda: self.move_right(event, True))
-        return
-
-    def move_left(self, event, skip_first_if=False):
-        if self.is_moving and self.current_move_proces == "left" and not skip_first_if:
-            return
-        if self.can_move_left():
-            self.stop_moving()
-            self.is_moving = True
-            self.current_move_proces = "left"
-            self.canvas.itemconfig(self.id, image=self.left_open)
-
-            self.check_special_positions()
-            self.smooth_move(dx=-ANIMATION_STEP_SIZE, dy=0)
-            self.moving_proces_id = Window.after(DELAY, lambda: self.move_left(event, True))  # TODO: DELAY / self.speed
+            self.smooth_move(visual_move_coordinates[0], visual_move_coordinates[1])
+            self.moving_proces_id = Window.after(DELAY, lambda: self.default_move(direction, visual_move_coordinates))
         return
 
     def smooth_move(self, dx, dy, counter=0):
