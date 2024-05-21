@@ -51,7 +51,8 @@ class Ghost:
     # region Hunting
 
     def build_way_to_pacman(self, pacman_y, pacman_x, pacman_direction=None) -> None:
-        tempory_board = self._find_way_to_pacman(pacman_y, pacman_x, pacman_direction)
+        tempory_board = self._find_way_to_pacman(pacman_y, pacman_x)
+        print(tempory_board[pacman_y][pacman_x])
         self.way_to_pacman = self._rebuild_path(tempory_board, pacman_y, pacman_x)
         self.next_move = self.way_to_pacman.pop(0)
 
@@ -70,11 +71,11 @@ class Ghost:
         for dy, dx in deltas:
             new_y, new_x = y + dy, x + dx
 
-            if 0 <= self.check_coordinates_validity(new_y, new_x):
+            if self.check_coordinates_validity(new_y, new_x):
                 if self.field[new_y][new_x] == 0 or self.field[new_y][new_x] == 2:
                     yield new_y, new_x
 
-    def _find_way_to_pacman(self, pacman_y: int, pacman_x: int, pacman_direction=None):
+    def _find_way_to_pacman(self, pacman_y: int, pacman_x: int):
         """Finding the most shorter way to reach pacman by using bfs alg"""
 
         curr_y, curr_x = self.position
@@ -84,7 +85,7 @@ class Ghost:
             [None for _ in range(FIELD_WIDTH)]
             for _ in range(FIELD_HEIGHT)
         ]
-
+        pass
         tempory_board[curr_y][curr_x] = None
         visited_board[curr_y][curr_x] = 1
 
@@ -152,11 +153,37 @@ class Ghost:
 
         return dy, dx
 
+    def find_nearest_free_cell(self, y: int, x: int):
+        deltas = [
+            (1, 0), (-1, 0), (0, 1), (0, -1)
+        ]
+
+        visited_board = deepcopy(self.field)
+
+        queue = [(y, x)]
+
+        while queue:
+            curr_y, curr_x = queue.pop(0)
+
+            for dy, dx in deltas:
+                ny, nx = curr_y + dy, curr_x + dx
+                if self.check_coordinates_validity(ny, nx):
+                    if visited_board[ny][nx] is not None:
+                        if self.field[ny][nx] == 0:
+                            return ny, nx
+                        else:
+                            queue.append((ny, nx))
+                            visited_board[ny][nx] = None
+
+
+
 
 if __name__ == '__main__':
     ghost = Ghost()
-    ghost.build_way_to_pacman(23, 11)
+    ghost.build_way_to_pacman(23, 15)
     ghost.random_move()
+    print(ghost.field[23][15])
+    print(ghost.find_nearest_free_cell(0, 11))
     print(ghost.next_move)
 
     print(ghost.way_to_pacman)
