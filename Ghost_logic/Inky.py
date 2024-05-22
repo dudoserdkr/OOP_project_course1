@@ -33,17 +33,17 @@ class Inky(Ghost):
         else:
             return blinky_y, blinky_x
 
-    def build_way_to_pacman(self, pacman_y, pacman_x, blinky_y, blinky_x, pacman_direction=None) -> None:
+    def build_way_to_target(self, pacman_y, pacman_x, blinky_y, blinky_x, pacman_direction=None) -> None:
 
         target_y, target_x = self._calc_target_coordinates(pacman_y, pacman_x,
                                                            blinky_y, blinky_x,
                                                            pacman_direction)
-        super().build_way_to_pacman(target_y, target_x, pacman_direction)
+        super().build_way_to_target(target_y, target_x, pacman_direction)
 
 
 if __name__ == '__main__':
     p = Inky()
-    print(p.build_way_to_pacman(23, 11,
+    print(p.build_way_to_target(23, 11,
                                 16, 14,
                                 'Right'))
     print(p.way_to_pacman)

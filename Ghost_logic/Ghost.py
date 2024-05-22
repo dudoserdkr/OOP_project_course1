@@ -37,6 +37,15 @@ class Ghost:
     # endregion
 
 
+    def move(self) -> None:
+        if self.condition == Ghost.SCARED:
+            self.random_move()
+        elif self.condition == Ghost.WALKING:
+            pass
+        elif self.condition == Ghost.HUNTING:
+            pass
+
+
     # region Scared
 
     def random_move(self) -> None:
@@ -50,9 +59,8 @@ class Ghost:
     # In this region there are methods, needed to finding the shortet way to the pacman
     # region Hunting
 
-    def build_way_to_pacman(self, pacman_y, pacman_x, pacman_direction=None) -> None:
+    def build_way_to_target(self, pacman_y, pacman_x, pacman_direction=None) -> None:
         tempory_board = self._find_way_to_pacman(pacman_y, pacman_x)
-        print(tempory_board[pacman_y][pacman_x])
         self.way_to_pacman = self._rebuild_path(tempory_board, pacman_y, pacman_x)
         self.next_move = self.way_to_pacman.pop(0)
 
@@ -153,8 +161,6 @@ class Ghost:
 
         return dy, dx
 
-
-
     def find_nearest_free_cell(self, y: int, x: int):
         deltas = [
             (1, 0), (-1, 0), (0, 1), (0, -1)
@@ -182,7 +188,7 @@ class Ghost:
 
 if __name__ == '__main__':
     ghost = Ghost()
-    ghost.build_way_to_pacman(23, 15)
+    ghost.build_way_to_target(23, 15)
     ghost.random_move()
     print(ghost.field[23][15])
     print(ghost.find_nearest_free_cell(0, 11))

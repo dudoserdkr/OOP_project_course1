@@ -5,10 +5,12 @@ from constants import CELL_SIZE
 from Window import Window
 from Canvas import CANVAS
 from Blinky import Blinky
+from FieldDrawing import FieldDrawing
+from Field import FIELD
 
 
 class GhostDrawer:
-    DELTA = CELL_SIZE / 5
+    DELTA = 1
     def __init__(self, ghost):
         self.ghost_avatar = ImageTk.PhotoImage(Image.open(os.path.join(os.path.dirname(__file__), '..', 'pictures', 'Blinky.png')).resize((CELL_SIZE, CELL_SIZE), Image.Resampling.LANCZOS))
         self.canvas = CANVAS
@@ -22,7 +24,10 @@ class GhostDrawer:
         next_y, next_x = self.multiple_coords_by_cell_size(self.ghost.next_move)
 
         if (curr_y, curr_x) == (next_y, next_x):
-            pass
+            self.ghost.position = self.ghost.next_move
+            self.ghost.random_move()
+            print("!!!!!!!!!!!!!!!!!!")
+            next_y, next_x = self.multiple_coords_by_cell_size(self.ghost.next_move)
 
         moving_direction = self.define_direction(self.position, (next_y, next_x))
         dy, dx = self.ghost.define_deltas(moving_direction)
@@ -46,17 +51,21 @@ class GhostDrawer:
         next_y, next_x = next_coords
 
         if curr_y == next_y and curr_x > next_x:
-            self.moving_direction = "Left"
+            return "Left"
         elif curr_y == next_y and curr_x < next_x:
-            self.moving_direction = "Right"
+            return "Right"
         elif curr_x == next_x and curr_y > next_y:
-            self.moving_direction = "Down"
+            return "Down"
         else:
-            self.moving_direction = "Up"
+            return "Up"
 
 
 if __name__ == '__main__':
+    field = FieldDrawing(FIELD)
+    field.draw_field()
     ghost = Blinky()
-    ghost.next_move = (11, 20)
+    ghost.position = (13, 23)
+    ghost.next_move = (14, 23)
     drawer = GhostDrawer(ghost)
     drawer.draw()
+    Window.mainloop()
