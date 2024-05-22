@@ -7,7 +7,7 @@ class Pinky(Ghost):
 
     def _calc_targer_coordinates(self, pacman_y: int, pacman_x: int, pacman_direction: str) -> tuple:
 
-        dy, dx = self._define_deltas(pacman_direction)
+        dy, dx = self.define_deltas(pacman_direction)
 
         target_y, target_x = pacman_y + dy * 4, pacman_x + dx * 4
 

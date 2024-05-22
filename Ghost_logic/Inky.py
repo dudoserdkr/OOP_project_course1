@@ -16,7 +16,7 @@ class Inky(Ghost):
         super().__init__()
 
     def _calc_target_coordinates(self, pacman_y: int, pacman_x: int, blinky_y: int, blinky_x: int, direction: str) -> tuple:
-        dy, dx = self._define_deltas(direction)
+        dy, dx = self.define_deltas(direction)
 
         # calculating pacman coordinates + 2 to one of the corrdinates with respect to direction
         # for example: if pacman looking to the right:

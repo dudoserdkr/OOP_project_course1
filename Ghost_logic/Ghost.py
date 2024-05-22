@@ -139,19 +139,21 @@ class Ghost:
         return 0 <= y <= FIELD_WIDTH and 0 <= x <= FIELD_HEIGHT
 
     @staticmethod
-    def _define_deltas(pacman_direction: str) -> tuple:
+    def define_deltas(moving_direction: str) -> tuple:
         dx = dy = 0
 
-        if pacman_direction == 'Up':
+        if moving_direction == 'Up':
             dy, dx = 1, 0
-        elif pacman_direction == 'Down':
+        elif moving_direction == 'Down':
             dy, dx = -1, 0
-        elif pacman_direction == 'Right':
+        elif moving_direction == 'Right':
             dy, dx = 0, 1
-        elif pacman_direction == 'Left':
+        elif moving_direction == 'Left':
             dy, dx = 0, -1
 
         return dy, dx
+
+
 
     def find_nearest_free_cell(self, y: int, x: int):
         deltas = [
