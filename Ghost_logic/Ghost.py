@@ -45,13 +45,14 @@ class Ghost(metaclass=ABCMeta):
     def move(self, pacman_y=None, pacman_x=None, blinky_y=None, blinky_x=None, direction=None) -> None:
         if self.condition == Ghost.SCARED:
             self.random_move()
-        elif self.condition == Ghost.WALKING: # TODO: Перевірити, чи не зламались інші приви,
+        elif self.condition == Ghost.WALKING: # TODO: Перевірити, чи не зламались інші привиди
             if self.walking_path:
                 self.next_move = self.walking_path.pop(0)
             else:
                 y, x = self.get_walking_start_coordinates()
                 path_to_walking_cell = self.path_to_trgt(y, x)
                 self.walking_path = path_to_walking_cell + self.get_walking_path()
+                self.next_move = self.walking_path.pop(0)
 
         elif self.condition == Ghost.HUNTING:
             pass
@@ -72,7 +73,7 @@ class Ghost(metaclass=ABCMeta):
 
     def build_way_to_target(self, pacman_y, pacman_x, pacman_direction=None) -> None:
         self.way_to_pacman = self.path_to_trgt(pacman_y, pacman_x)
-        self.next_move = self.way_to_pacman.pop(0)
+        self.next_move = self.way_to_pacman.pop(0) # TODO прибрати тут pop з self.way_to_pacman + перейменувати це поле
 
     def path_to_trgt(self, y, x) -> list[list]:
         tempory_board = self._find_way_to_pacman(y, x)
@@ -155,7 +156,12 @@ class Ghost(metaclass=ABCMeta):
             x, y = current_position
             current_position = tempory_board[x][y]
 
-        return rebuilded_path[::-1]
+        """
+        після циклу ми отримали повний шлях (список з кортежів, де кортежі вигляду (y, x)). Нам треба його перевенути
+        щоб перша координати стала останньою, а остання першою. Також треба виключити у вже перевернутом списку першу координату.
+        Бо перша координата - поточне положення привида, яке і так міститься в self.position
+        """
+        return rebuilded_path[::-1][1:len(rebuilded_path) - 1]
     # endregion
 
     @staticmethod
