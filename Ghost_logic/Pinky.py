@@ -1,5 +1,4 @@
 from Ghost import Ghost
-from Field import FIELD_WIDTH, FIELD_HEIGHT
 
 
 class Pinky(Ghost):
@@ -8,7 +7,7 @@ class Pinky(Ghost):
 
     def _calc_targer_coordinates(self, pacman_y: int, pacman_x: int, pacman_direction: str) -> tuple:
 
-        dy, dx = self._define_deltas(pacman_direction)
+        dy, dx = self.define_deltas(pacman_direction)
 
         target_y, target_x = pacman_y + dy * 4, pacman_x + dx * 4
 
@@ -17,18 +16,21 @@ class Pinky(Ghost):
                 return target_y, target_x
 
             else:
-                for i in range(1, FIELD_HEIGHT):
-                    target_y, target_x = pacman_y + dy * (4 + i), pacman_x + dx * (4 + i)
-                    if self.check_coordinates_validity(target_y, target_x):
-                        if self.field[target_y][target_x] == 0:
-                            return target_y, target_x
-                    else:
-                        break
+                target_y, target_x = self.find_nearest_free_cell(target_y, target_x)
+                return target_y, target_x
+        else:
+            return pacman_y, pacman_x
 
-        return pacman_y, pacman_x
 
-    def _find_way_to_pacman(self, pacman_y: int, pacman_x: int, pacman_direction=None):
+    def build_way_to_target(self, pacman_y, pacman_x, pacman_direction=None) -> None:
         pacman_y, pacman_x = self._calc_targer_coordinates(pacman_y, pacman_x, pacman_direction)
+        super().build_way_to_target(pacman_y, pacman_x, pacman_direction)
 
-        super()._find_way_to_pacman(pacman_y, pacman_x)
+
+
+if __name__ == '__main__':
+    p = Pinky()
+    print(p.build_way_to_target(23, 11, 'Right'))
+    print(p.way_to_pacman)
+
 
