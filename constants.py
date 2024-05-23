@@ -1,6 +1,13 @@
+import os
+
+
+current_dir = os.path.dirname(os.path.abspath(__file__))
+file_path = os.path.join(current_dir, 'settings.txt')
+
+
 settings_arr = []
 
-with open('settings.txt', 'r') as f:
+with open(file_path, 'r') as f:
     for line in f:
         line = line.split('=')
         settings_arr += [int(line[1])]

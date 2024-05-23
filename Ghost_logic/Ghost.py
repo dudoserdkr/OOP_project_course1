@@ -1,9 +1,9 @@
 from Field import FIELD, FIELD_WIDTH, FIELD_HEIGHT
 from copy import deepcopy
 from random import randint
+from abc import ABCMeta, abstractmethod
 
-
-class Ghost:
+class Ghost(metaclass=ABCMeta):
     START_POSITION = (11, 14)
     SCARED = 0
     WALKING = 1
@@ -25,16 +25,37 @@ class Ghost:
         self.next_move = None
         self.target_coords = None
 
+        self.walking_path = []
         self.way_to_pacman = []
         self.condition = 1
 
 
     # region walking
+    @abstractmethod
+    def get_walking_path(self):
+        pass
 
-    def walking(self):
+    @abstractmethod
+    def get_walking_start_coordinates(self):
         pass
 
     # endregion
+
+
+    def move(self, pacman_y=None, pacman_x=None, blinky_y=None, blinky_x=None, direction=None) -> None:
+        if self.condition == Ghost.SCARED:
+            self.random_move()
+        elif self.condition == Ghost.WALKING: # TODO: Перевірити, чи не зламались інші привиди
+            if self.walking_path:
+                self.next_move = self.walking_path.pop(0)
+            else:
+                y, x = self.get_walking_start_coordinates()
+                path_to_walking_cell = self.path_to_trgt(y, x)
+                self.walking_path = path_to_walking_cell + self.get_walking_path()
+                self.next_move = self.walking_path.pop(0)
+
+        elif self.condition == Ghost.HUNTING:
+            pass
 
 
     # region Scared
@@ -50,10 +71,15 @@ class Ghost:
     # In this region there are methods, needed to finding the shortet way to the pacman
     # region Hunting
 
-    def build_way_to_pacman(self, pacman_y, pacman_x, pacman_direction=None) -> None:
-        tempory_board = self._find_way_to_pacman(pacman_y, pacman_x, pacman_direction)
-        self.way_to_pacman = self._rebuild_path(tempory_board, pacman_y, pacman_x)
-        self.next_move = self.way_to_pacman.pop(0)
+    def build_way_to_target(self, pacman_y, pacman_x, pacman_direction=None) -> None:
+        self.way_to_pacman = self.path_to_trgt(pacman_y, pacman_x)
+        self.next_move = self.way_to_pacman.pop(0) # TODO прибрати тут pop з self.way_to_pacman + перейменувати це поле
+
+    def path_to_trgt(self, y, x) -> list[list]:
+        tempory_board = self._find_way_to_pacman(y, x)
+        if tempory_board is None:
+            raise ValueError("Координати, які були передані в функцію path_to_trgt є некоректними.")
+        return self._rebuild_path(tempory_board, y, x)
 
     def _ghost_possible_moves(self, y: int, x: int):
         """
@@ -70,11 +96,11 @@ class Ghost:
         for dy, dx in deltas:
             new_y, new_x = y + dy, x + dx
 
-            if 0 <= self.check_coordinates_validity(new_y, new_x):
+            if self.check_coordinates_validity(new_y, new_x):
                 if self.field[new_y][new_x] == 0 or self.field[new_y][new_x] == 2:
                     yield new_y, new_x
 
-    def _find_way_to_pacman(self, pacman_y: int, pacman_x: int, pacman_direction=None):
+    def _find_way_to_pacman(self, pacman_y: int, pacman_x: int):
         """Finding the most shorter way to reach pacman by using bfs alg"""
 
         curr_y, curr_x = self.position
@@ -84,7 +110,7 @@ class Ghost:
             [None for _ in range(FIELD_WIDTH)]
             for _ in range(FIELD_HEIGHT)
         ]
-
+        pass
         tempory_board[curr_y][curr_x] = None
         visited_board[curr_y][curr_x] = 1
 
@@ -130,7 +156,12 @@ class Ghost:
             x, y = current_position
             current_position = tempory_board[x][y]
 
-        return rebuilded_path[::-1]
+        """
+        після циклу ми отримали повний шлях (список з кортежів, де кортежі вигляду (y, x)). Нам треба його перевенути
+        щоб перша координати стала останньою, а остання першою. Також треба виключити у вже перевернутом списку першу координату.
+        Бо перша координата - поточне положення привида, яке і так міститься в self.position
+        """
+        return rebuilded_path[::-1][1:len(rebuilded_path) - 1]
     # endregion
 
     @staticmethod
@@ -138,25 +169,51 @@ class Ghost:
         return 0 <= y <= FIELD_WIDTH and 0 <= x <= FIELD_HEIGHT
 
     @staticmethod
-    def _define_deltas(pacman_direction: str) -> tuple:
+    def define_deltas(moving_direction: str) -> tuple:
         dx = dy = 0
 
-        if pacman_direction == 'Up':
+        if moving_direction == 'Up':
             dy, dx = 1, 0
-        elif pacman_direction == 'Down':
+        elif moving_direction == 'Down':
             dy, dx = -1, 0
-        elif pacman_direction == 'Right':
+        elif moving_direction == 'Right':
             dy, dx = 0, 1
-        elif pacman_direction == 'Left':
+        elif moving_direction == 'Left':
             dy, dx = 0, -1
 
         return dy, dx
 
+    def find_nearest_free_cell(self, y: int, x: int):
+        deltas = [
+            (1, 0), (-1, 0), (0, 1), (0, -1)
+        ]
+
+        visited_board = deepcopy(self.field)
+
+        queue = [(y, x)]
+
+        while queue:
+            curr_y, curr_x = queue.pop(0)
+
+            for dy, dx in deltas:
+                ny, nx = curr_y + dy, curr_x + dx
+                if self.check_coordinates_validity(ny, nx):
+                    if visited_board[ny][nx] is not None:
+                        if self.field[ny][nx] == 0:
+                            return ny, nx
+                        else:
+                            queue.append((ny, nx))
+                            visited_board[ny][nx] = None
+
+
+
 
 if __name__ == '__main__':
     ghost = Ghost()
-    ghost.build_way_to_pacman(23, 11)
+    ghost.build_way_to_target(23, 15)
     ghost.random_move()
+    print(ghost.field[23][15])
+    print(ghost.find_nearest_free_cell(0, 11))
     print(ghost.next_move)
 
     print(ghost.way_to_pacman)
