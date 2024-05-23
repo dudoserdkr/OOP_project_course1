@@ -10,28 +10,50 @@ from Field import FIELD
 class Total:
     DELAY = 30
     def __init__(self):
-        self.first_tablet = Tablet([1, 3])
-        self.second_tablet = Tablet([1, 23])
-        self.third_tablet = Tablet([26, 3])
-        self.fourth_tablet = Tablet([26, 23])
+
         self.coin_list = []
         self.tablet_list = []
         self.score = Score()
         self.pacman_pos = None
         self.map = self.map()
+        self.observers = []
+        self.empty_field = True
         self.vp = VisualPacMan()
 
     def get_pacman_pos(self, pacman):
         self.coin_check(pacman)
         self.tablet_check(pacman)
 
+
+
+    def coin_tablet_total(self):
+        if not self.coin_list and not self.tablet_list:
+            self.coin()
+            self.tablet_list_maker()
+            self.tablet_drawer()
+            self.score_coin()  # Регистрация монет у наблюдателя Score
+            self.score_tablet()
+
     def coin_check(self, pacman):
         for coin in self.coin_list:
             coin.change_status(pacman)
+            if coin.COIN_STATUS == False:
+                try:
+                    self.coin_list.remove(coin)
+                except ValueError:
+                    pass
 
     def tablet_check(self, pacman):
         for tablet in self.tablet_list:
             tablet.change_status(pacman)
+            if tablet.TABLET_STATUS == False:
+                try:
+                    self.tablet_list.remove(tablet)
+                except ValueError:
+                    pass
+            #print (self.tablet_list)
+
+
 
     @staticmethod
     def map():
@@ -52,11 +74,15 @@ class Total:
             t.register_observer(self.score)
 
     def tablet_list_maker(self):
+        first_tablet = Tablet([1, 3])
+        second_tablet = Tablet([1, 23])
+        third_tablet = Tablet([26, 3])
+        fourth_tablet = Tablet([26, 23])
         self.tablet_list = []
-        self.tablet_list.append(self.first_tablet)
-        self.tablet_list.append(self.second_tablet)
-        self.tablet_list.append(self.third_tablet)
-        self.tablet_list.append(self.fourth_tablet)
+        self.tablet_list.append(first_tablet)
+        self.tablet_list.append(second_tablet)
+        self.tablet_list.append(third_tablet)
+        self.tablet_list.append(fourth_tablet)
 
     def tablet_drawer(self):
         for tab in self.tablet_list:
