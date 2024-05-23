@@ -1,9 +1,9 @@
 from Field import FIELD, FIELD_WIDTH, FIELD_HEIGHT
 from copy import deepcopy
 from random import randint
+from abc import ABCMeta, abstractmethod
 
-
-class Ghost:
+class Ghost(metaclass=ABCMeta):
     START_POSITION = (11, 14)
     SCARED = 0
     WALKING = 1
@@ -25,23 +25,34 @@ class Ghost:
         self.next_move = None
         self.target_coords = None
 
+        self.walking_path = []
         self.way_to_pacman = []
         self.condition = 1
 
 
     # region walking
+    @abstractmethod
+    def get_walking_path(self):
+        pass
 
-    def walking(self):
+    @abstractmethod
+    def get_walking_start_coordinates(self):
         pass
 
     # endregion
 
 
-    def move(self) -> None:
+    def move(self, pacman_y=None, pacman_x=None, blinky_y=None, blinky_x=None, direction=None) -> None:
         if self.condition == Ghost.SCARED:
             self.random_move()
-        elif self.condition == Ghost.WALKING:
-            pass
+        elif self.condition == Ghost.WALKING: # TODO: Перевірити, чи не зламались інші приви,
+            if self.walking_path:
+                self.next_move = self.walking_path.pop(0)
+            else:
+                y, x = self.get_walking_start_coordinates()
+                path_to_walking_cell = self.path_to_trgt(y, x)
+                self.walking_path = path_to_walking_cell + self.get_walking_path()
+
         elif self.condition == Ghost.HUNTING:
             pass
 
@@ -60,9 +71,14 @@ class Ghost:
     # region Hunting
 
     def build_way_to_target(self, pacman_y, pacman_x, pacman_direction=None) -> None:
-        tempory_board = self._find_way_to_pacman(pacman_y, pacman_x)
-        self.way_to_pacman = self._rebuild_path(tempory_board, pacman_y, pacman_x)
+        self.way_to_pacman = self.path_to_trgt(pacman_y, pacman_x)
         self.next_move = self.way_to_pacman.pop(0)
+
+    def path_to_trgt(self, y, x) -> list[list]:
+        tempory_board = self._find_way_to_pacman(y, x)
+        if tempory_board is None:
+            raise ValueError("Координати, які були передані в функцію path_to_trgt є некоректними.")
+        return self._rebuild_path(tempory_board, y, x)
 
     def _ghost_possible_moves(self, y: int, x: int):
         """

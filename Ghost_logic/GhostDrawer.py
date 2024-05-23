@@ -10,7 +10,7 @@ from Field import FIELD
 
 
 class GhostDrawer:
-    DELTA = 1
+    DELTA = 10
     def __init__(self, ghost):
         self.ghost_avatar = ImageTk.PhotoImage(Image.open(os.path.join(os.path.dirname(__file__), '..', 'pictures', 'Blinky.png')).resize((CELL_SIZE, CELL_SIZE), Image.Resampling.LANCZOS))
         self.canvas = CANVAS
@@ -37,7 +37,7 @@ class GhostDrawer:
         curr_x += self.DELTA * dx
         self.position = curr_y, curr_x
 
-        self.canvas.coords(self.avatar_id, curr_y, curr_x)
+        self.canvas.coords(self.avatar_id, curr_x, curr_y)
         Window.after(20, self.draw)
 
     @staticmethod
@@ -64,8 +64,8 @@ if __name__ == '__main__':
     field = FieldDrawing(FIELD)
     field.draw_field()
     ghost = Blinky()
-    ghost.position = (13, 23)
-    ghost.next_move = (14, 23)
+    ghost.position = (23, 13)
+    ghost.next_move = (23, 14)
     drawer = GhostDrawer(ghost)
     drawer.draw()
     Window.mainloop()
