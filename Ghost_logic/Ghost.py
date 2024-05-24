@@ -27,7 +27,7 @@ class Ghost(metaclass=ABCMeta):
 
         self.pacman = None # TODO: зробити, щоб пакман передався через ініт
         self.pacman_last_position = None
-        self.blinky_coords = None
+        self.blinky = None
 
         self.walking_path = []
         self.way_to_pacman = []
@@ -60,17 +60,19 @@ class Ghost(metaclass=ABCMeta):
 
         elif self.condition == Ghost.HUNTING:  # TODO: розібратись з пакмен дірекшен
             if self.pacman_last_position is None:
-                self.build_way_to_target(*self.pacman.position, self.pacman.direction, *self.blinky_coords)
-                self.pacman_last_position = self.pacman.position
+                y1, x1 = self.pacman.position
+                self.build_way_to_target(y1, x1)
+                self.pacman_last_position = deepcopy(self.pacman.position)
 
             elif self.pacman_last_position != self.pacman.position:
-                self.build_way_to_target(*self.pacman.position, self.pacman.direction, *self.blinky_coords)
-                self.pacman_last_position = self.pacman.position
+                y1, x1 = self.pacman.position
+                self.build_way_to_target(y1, x1)
+                self.pacman_last_position = deepcopy(self.pacman.position)
 
-            elif self.pacman_last_position == self.pacman.position:
+            elif self.pacman_last_position == self.pacman.position and self.way_to_pacman:
                 self.next_move = self.way_to_pacman.pop(0)
-
-        #raise AssertionError("У функції move щось пішло не так, це може було пов'язано з тим, що жодна з умов не виконалась. Можливо, що self.way_to_pacman став пустим")
+            # else:
+            #     raise AssertionError("У функції move щось пішло не так, це може було пов'язано з тим, що жодна з умов не виконалась. Можливо, що self.way_to_pacman став пустим")
 
 
     # region Scared

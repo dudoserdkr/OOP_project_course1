@@ -4,14 +4,14 @@ import os
 from constants import CELL_SIZE
 from Window import Window
 from Canvas import CANVAS
-from Blinky import Blinky
+from Ghost_logic.Blinky import Blinky
 from FieldDrawing import FieldDrawing
 from Field import FIELD
 from random import randint
 
 
 class GhostDrawer:
-    DELTA = 2
+    DELTA = 1
     def __init__(self, ghost):
         self.ghost_avatar = ImageTk.PhotoImage(Image.open(os.path.join(os.path.dirname(__file__), '..', 'pictures', 'Blinky.png')).resize((CELL_SIZE, CELL_SIZE), Image.Resampling.LANCZOS))
         self.canvas = CANVAS
