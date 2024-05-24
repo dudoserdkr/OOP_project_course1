@@ -5,9 +5,10 @@ from Total import Total
 
 
 class Observer:
-    def __init__(self, pacman):
+    def __init__(self, total, pacman):
         self.observers = []
         self.pacman = pacman
+        self.total = total
 
     def __add__(self, other):
         self.observers.append(other)
@@ -15,20 +16,28 @@ class Observer:
     def main_loop(self):
         for obs in self.observers:
             obs.get_pacman_pos(self.pacman)
+        if not any([self.total.coin_list, self.total.tablet_list]):
+            print("Все монеты и таблетки собраны!")
+            total.coin_tablet_total()
 
         Window.after(DELAY // 30, lambda: self.main_loop())
 
 
+
+
+
+
 if __name__ == '__main__':
     total = Total()
-    observer = Observer(total.vp)
+    observer = Observer(total, total.vp)
     # Додали підписника який отримує інфу про позицію пакмана, подімна штука буде і з гостами
+
+
+    observer.main_loop()
+
     observer + total
     total.pacman()
-    observer.main_loop()
-    total.coin()
-    total.tablet_list_maker()
-    total.tablet_drawer()
+    #total.coin_tablet_total()
     total.score_coin()
     total.score_tablet()
     total.scoreboard()
