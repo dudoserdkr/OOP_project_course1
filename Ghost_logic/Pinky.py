@@ -22,7 +22,7 @@ class Pinky(Ghost):
             return pacman_y, pacman_x
 
 
-    def build_way_to_target(self, pacman_y, pacman_x, pacman_direction=None) -> None:
+    def build_way_to_target(self, pacman_y, pacman_x, pacman_direction=None, blinky_y=None, blinky_x=None) -> None:
         pacman_y, pacman_x = self._calc_targer_coordinates(pacman_y, pacman_x, pacman_direction)
         super().build_way_to_target(pacman_y, pacman_x, pacman_direction)
 

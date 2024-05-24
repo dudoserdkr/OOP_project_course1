@@ -15,7 +15,7 @@ class Inky(Ghost):
     def __init__(self):
         super().__init__()
 
-    def _calc_target_coordinates(self, pacman_y: int, pacman_x: int, blinky_y: int, blinky_x: int, direction: str) -> tuple:
+    def _calc_target_coordinates(self, pacman_y: int, pacman_x: int, direction: str, blinky_y: int, blinky_x: int) -> tuple:
         dy, dx = self.define_deltas(direction)
 
         # calculating pacman coordinates + 2 to one of the corrdinates with respect to direction
@@ -33,11 +33,13 @@ class Inky(Ghost):
         else:
             return blinky_y, blinky_x
 
-    def build_way_to_target(self, pacman_y, pacman_x, blinky_y, blinky_x, pacman_direction=None) -> None:
+    def build_way_to_target(self, pacman_y, pacman_x, pacman_direction=None, blinky_y=None, blinky_x=None) -> None:
 
-        target_y, target_x = self._calc_target_coordinates(pacman_y, pacman_x,
+        target_y, target_x = self._calc_target_coordinates(
+                                                           pacman_y, pacman_x,
+                                                           pacman_direction,
                                                            blinky_y, blinky_x,
-                                                           pacman_direction)
+                                                           )
         super().build_way_to_target(target_y, target_x, pacman_direction)
 
 

@@ -18,8 +18,7 @@ class Blinky(Ghost):
         return 5, 21
 
 if __name__ == '__main__':
-    b = Blinky()
-    b.build_way_to_target(23, 13)
-    print(b.position)
-    print(b.next_move)
-    print(b.way_to_pacman)
+    ghost = Blinky()
+    ghost.position = (29, 6)
+    ghost.condition = ghost.WALKING
+    ghost.move()

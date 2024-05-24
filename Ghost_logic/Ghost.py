@@ -25,6 +25,10 @@ class Ghost(metaclass=ABCMeta):
         self.next_move = None
         self.target_coords = None
 
+        self.pacman = None # TODO: зробити, щоб пакман передався через ініт
+        self.pacman_last_position = None
+        self.blinky_coords = None
+
         self.walking_path = []
         self.way_to_pacman = []
         self.condition = 1
@@ -42,7 +46,7 @@ class Ghost(metaclass=ABCMeta):
     # endregion
 
 
-    def move(self, pacman_y=None, pacman_x=None, blinky_y=None, blinky_x=None, direction=None) -> None:
+    def move(self) -> None:
         if self.condition == Ghost.SCARED:
             self.random_move()
         elif self.condition == Ghost.WALKING: # TODO: Перевірити, чи не зламались інші привиди
@@ -54,8 +58,19 @@ class Ghost(metaclass=ABCMeta):
                 self.walking_path = path_to_walking_cell + self.get_walking_path()
                 self.next_move = self.walking_path.pop(0)
 
-        elif self.condition == Ghost.HUNTING:
-            pass
+        elif self.condition == Ghost.HUNTING:  # TODO: розібратись з пакмен дірекшен
+            if self.pacman_last_position is None:
+                self.build_way_to_target(*self.pacman.position, self.pacman.direction, *self.blinky_coords)
+                self.pacman_last_position = self.pacman.position
+
+            elif self.pacman_last_position != self.pacman.position:
+                self.build_way_to_target(*self.pacman.position, self.pacman.direction, *self.blinky_coords)
+                self.pacman_last_position = self.pacman.position
+
+            elif self.pacman_last_position == self.pacman.position:
+                self.next_move = self.way_to_pacman.pop(0)
+
+        #raise AssertionError("У функції move щось пішло не так, це може було пов'язано з тим, що жодна з умов не виконалась. Можливо, що self.way_to_pacman став пустим")
 
 
     # region Scared
@@ -71,7 +86,7 @@ class Ghost(metaclass=ABCMeta):
     # In this region there are methods, needed to finding the shortet way to the pacman
     # region Hunting
 
-    def build_way_to_target(self, pacman_y, pacman_x, pacman_direction=None) -> None:
+    def build_way_to_target(self, pacman_y, pacman_x, pacman_direction=None, blinky_y=None, blinky_x=None) -> None:
         self.way_to_pacman = self.path_to_trgt(pacman_y, pacman_x)
         self.next_move = self.way_to_pacman.pop(0) # TODO прибрати тут pop з self.way_to_pacman + перейменувати це поле
 
@@ -99,6 +114,11 @@ class Ghost(metaclass=ABCMeta):
             if self.check_coordinates_validity(new_y, new_x):
                 if self.field[new_y][new_x] == 0 or self.field[new_y][new_x] == 2:
                     yield new_y, new_x
+                elif self.field[new_y][new_x] == 3: # TODO: зробити можливість проходити через бар'єри
+                    if new_y == 27:
+                        yield 14, 1
+                    else:
+                        yield 14, 26
 
     def _find_way_to_pacman(self, pacman_y: int, pacman_x: int):
         """Finding the most shorter way to reach pacman by using bfs alg"""
@@ -161,12 +181,12 @@ class Ghost(metaclass=ABCMeta):
         щоб перша координати стала останньою, а остання першою. Також треба виключити у вже перевернутом списку першу координату.
         Бо перша координата - поточне положення привида, яке і так міститься в self.position
         """
-        return rebuilded_path[::-1][1:len(rebuilded_path) - 1]
+        return rebuilded_path[::-1][1:len(rebuilded_path)]
     # endregion
 
     @staticmethod
     def check_coordinates_validity(y, x):
-        return 0 <= y <= FIELD_WIDTH and 0 <= x <= FIELD_HEIGHT
+        return 0 <= y <= FIELD_HEIGHT - 1 and 0 <= x <= FIELD_WIDTH - 1
 
     @staticmethod
     def define_deltas(moving_direction: str) -> tuple:
