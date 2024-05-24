@@ -41,6 +41,7 @@ class VisualPacMan(PacMan):
         self.is_moving = False
         self.current_move_proces = None
         self.moving_proces_id = None
+        self.absolut_stop = False
 
         self.animation_delay = (DELAY // ANIMATION_STEP)
 
@@ -97,7 +98,9 @@ class VisualPacMan(PacMan):
         self.default_move(direction, visual_move_coordinates)
 
     def default_move(self, direction, visual_move_coordinates):
-        if self.possibility_dict[direction]():
+        if self.absolut_stop:
+            return
+        elif self.possibility_dict[direction]():
             self.stop_moving()
             self.is_moving = True
             self.current_move_proces = direction
@@ -137,9 +140,19 @@ class VisualPacMan(PacMan):
 
     def visual_death(self, event):  # TODO: death visualisation, teleportation to start position
         self.stop_moving()
+        self.absolut_stop = True
 
         # self.current_move_proces = None
 
+    def visualisation_death(self, counter=0):
+        N = 3
+        if counter > N:
+            self.death()
+            # TODO: visual teleport to start position
+            self.absolut_stop = False
+        # TODO: change sprites like dict[counter] or list[counter]
+        counter += 1
+        Window.after(DELAY, lambda: self.visualisation_death(counter))
 
 if __name__ == "__main__":
     m = FieldDrawing(FIELD)

@@ -1,13 +1,11 @@
 from tkinter import *
 from PIL import ImageTk, Image
-from VisualPacMan import VisualPacMan
-from Canvas import CANVAS
 from Window import Window
-from Field import FIELD
-from FieldDrawing import FieldDrawing
 from Canvas import CANVAS
 from constants import DELAY, CELL_SIZE
-
+from pydub import AudioSegment
+from pydub.playback import play
+import threading
 
 class Coin:
     COIN_STATUS = True
@@ -24,11 +22,15 @@ class Coin:
         self.id = None
         self.observers = []
 
+
+
     def draw(self):
         self.id = CANVAS.create_image(self.coin_position[0] + 10, self.coin_position[1] + 10, image=self.resized)
 
     def delete(self):
         CANVAS.delete(self.id)
+
+
 
     def register_observer(self, observer):
         if observer not in self.observers:
@@ -55,6 +57,8 @@ class Coin:
             Coin.SCORE += 10
             self.notify_observers()
             self.delete()
+
+
 
 
 
