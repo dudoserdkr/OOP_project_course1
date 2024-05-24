@@ -7,6 +7,7 @@ from Canvas import CANVAS
 from Blinky import Blinky
 from FieldDrawing import FieldDrawing
 from Field import FIELD
+from random import randint
 
 
 class GhostDrawer:
@@ -26,8 +27,9 @@ class GhostDrawer:
         curr_y, curr_x = self.position
         next_y, next_x = self.multiple_coords_by_cell_size(self.ghost.next_move)
 
-        if curr_y == 4*CELL_SIZE and curr_x == 21*CELL_SIZE:
-            print("123123123")
+        if self.ghost.position == (14, 1):
+            self.position = next_y, next_x
+            curr_y, curr_x = self.position
 
         if (curr_y, curr_x) == (next_y, next_x):
             self.ghost.position = self.ghost.next_move
@@ -37,6 +39,7 @@ class GhostDrawer:
         moving_direction = self.define_direction(self.position, (next_y, next_x))
         dy, dx = self.ghost.define_deltas(moving_direction)
         self.moving_direction = moving_direction
+
 
         curr_y += self.DELTA * dy
         curr_x += self.DELTA * dx
@@ -69,8 +72,16 @@ if __name__ == '__main__':
     field = FieldDrawing(FIELD)
     field.draw_field()
     ghost = Blinky()
-    ghost.position = (26, 1)
+    while True:
+        y = randint(0, 30)
+        x = randint(0, 27)
+        if FIELD[y][x] == 0:
+            break
+
+    ghost.position = (14, 4)
     ghost.condition = ghost.WALKING
     drawer = GhostDrawer(ghost)
+    ghost.move()
+    print(ghost.walking_path)
     drawer.draw()
     Window.mainloop()

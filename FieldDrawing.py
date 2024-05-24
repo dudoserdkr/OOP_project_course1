@@ -33,7 +33,7 @@ class FieldDrawing:
                 elif self.map[i][j] == 0:
                     color = "black"
                 elif self.map[i][j] == 2:
-                    color = "blue"
+                    color = "pink"
                 elif self.map[i][j] == 3:
                     color = "pink"
                 self.canvas.create_rectangle(
