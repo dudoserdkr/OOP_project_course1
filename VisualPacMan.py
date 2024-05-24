@@ -37,6 +37,7 @@ class VisualPacMan(PacMan):
 
         self.pacman_photo = None
         self.id = self.create_pacman()
+        self.direction = 'Up'
 
         self.is_moving = False
         self.current_move_proces = None
@@ -73,6 +74,7 @@ class VisualPacMan(PacMan):
         if self.is_moving and self.current_move_proces == "up":
             return
         direction = "up"
+        self.direction = 'Up'
         visual_move_coordinates = [0, -ANIMATION_STEP_SIZE]
         self.default_move(direction, visual_move_coordinates)
 
@@ -80,6 +82,7 @@ class VisualPacMan(PacMan):
         if self.is_moving and self.current_move_proces == "down":
             return
         direction = "down"
+        self.direction = 'Down'
         visual_move_coordinates = [0, ANIMATION_STEP_SIZE]
         self.default_move(direction, visual_move_coordinates)
 
@@ -87,6 +90,7 @@ class VisualPacMan(PacMan):
         if self.is_moving and self.current_move_proces == "right":
             return
         direction = "right"
+        self.direction = 'Right'
         visual_move_coordinates = [ANIMATION_STEP_SIZE, 0]
         self.default_move(direction, visual_move_coordinates)
 
@@ -94,6 +98,7 @@ class VisualPacMan(PacMan):
         if self.is_moving and self.current_move_proces == "left":
             return
         direction = "left"
+        self.direction = 'Left'
         visual_move_coordinates = [-ANIMATION_STEP_SIZE, 0]
         self.default_move(direction, visual_move_coordinates)
 
