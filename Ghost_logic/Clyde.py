@@ -19,10 +19,13 @@ class Clyde(Ghost):
     def _calc_target_coordinates(self, pacman_position):
         pacman_y, pacman_x = pacman_position
         y, x = self.position
-        if (pacman_y - y) ** 2 + (pacman_x - x) ** 2 <= 64:
-            return pacman_y, pacman_x
-        else:
+
+        distance_squared = (pacman_y - y) ** 2 + (pacman_x - x) ** 2
+        radius_squared = 64
+        if distance_squared <= radius_squared:
             return self.get_walking_start_coordinates()
+        else:
+            return pacman_y, pacman_x
 
     def build_way_to_target(self, pacman_position: tuple, pacman_direction=None, blinky_position=None) -> None:
 

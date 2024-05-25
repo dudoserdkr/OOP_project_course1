@@ -17,7 +17,21 @@ from Ghost_logic.Clyde import Clyde
 class GhostDrawer:
     DELTA = 1
     def __init__(self, ghost):
-        self.ghost_avatar = ImageTk.PhotoImage(Image.open(os.path.join(os.path.dirname(__file__), '..', 'pictures', 'Blinky.png')).resize((CELL_SIZE, CELL_SIZE), Image.Resampling.LANCZOS))
+        if type(ghost) == Blinky:
+            self.ghost_avatar = ImageTk.PhotoImage(Image.open(os.path.join(os.path.dirname(__file__), '..', 'pictures', 'Blinky.png')).resize((CELL_SIZE, CELL_SIZE), Image.Resampling.LANCZOS))
+        elif type(ghost) == Pinky:
+            self.ghost_avatar = ImageTk.PhotoImage(
+                Image.open(os.path.join(os.path.dirname(__file__), '..', 'pictures', 'Pinky.png')).resize(
+                    (CELL_SIZE, CELL_SIZE), Image.Resampling.LANCZOS))
+        elif type(ghost) == Inky:
+            self.ghost_avatar = ImageTk.PhotoImage(
+                Image.open(os.path.join(os.path.dirname(__file__), '..', 'pictures', 'Inky.png')).resize(
+                    (CELL_SIZE, CELL_SIZE), Image.Resampling.LANCZOS))
+        elif type(ghost) == Clyde:
+            self.ghost_avatar = ImageTk.PhotoImage(
+                Image.open(os.path.join(os.path.dirname(__file__), '..', 'pictures', 'Clyde.png')).resize(
+                    (CELL_SIZE, CELL_SIZE), Image.Resampling.LANCZOS))
+
         self.canvas = CANVAS
         self.ghost = ghost
         self.avatar_id = self.canvas.create_image(23, 13, anchor=tk.NW, image=self.ghost_avatar)

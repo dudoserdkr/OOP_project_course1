@@ -29,6 +29,9 @@ if __name__ == '__main__':
     i.condition = i.HUNTING
     c.condition = c.HUNTING
 
+
+
+
     drawer = GhostDrawer(b)
     drawer1 = GhostDrawer(p)
     drawer2 = GhostDrawer(i)
@@ -36,6 +39,5 @@ if __name__ == '__main__':
     drawer.draw()
     drawer1.draw()
     drawer2.draw()
-    # drawer3.draw()
-    print(vp.position)
+    drawer3.draw()
     Window.mainloop()
