@@ -1,9 +1,18 @@
-from Ghost import Ghost
+from Ghost_logic.Ghost import Ghost
 
 
 class Pinky(Ghost):
     def __init__(self):
         super().__init__()
+
+    def get_walking_path(self):
+        return [
+            (4, 6), (3, 6), (2, 6), (1, 6), (1, 5), (1, 4), (1, 3), (1, 2), (1, 1),
+            (2, 1), (3, 1), (4, 1), (5, 1), (5, 2), (5, 3), (5, 4), (5, 5)
+                ]
+
+    def get_walking_start_coordinates(self):
+        return 5, 6
 
     def _calc_targer_coordinates(self, pacman_y: int, pacman_x: int, pacman_direction: str) -> tuple:
 
@@ -22,9 +31,10 @@ class Pinky(Ghost):
             return pacman_y, pacman_x
 
 
-    def build_way_to_target(self, pacman_y, pacman_x, pacman_direction=None, blinky_y=None, blinky_x=None) -> None:
-        pacman_y, pacman_x = self._calc_targer_coordinates(pacman_y, pacman_x, pacman_direction)
-        super().build_way_to_target(pacman_y, pacman_x, pacman_direction)
+    def build_way_to_target(self, pacman_position, pacman_direction=None, blinky_position=None) -> None:
+        pacman_y, pacman_x = pacman_position
+        target_coordinates = self._calc_targer_coordinates(pacman_y, pacman_x, pacman_direction)
+        super().build_way_to_target(target_coordinates)
 
 
 

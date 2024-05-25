@@ -8,6 +8,10 @@ from Ghost_logic.Blinky import Blinky
 from FieldDrawing import FieldDrawing
 from Field import FIELD
 from random import randint
+from Ghost_logic.Pinky import Pinky
+from Ghost_logic.Inky import Inky
+from Ghost_logic.Clyde import Clyde
+
 
 
 class GhostDrawer:
@@ -71,17 +75,29 @@ class GhostDrawer:
 if __name__ == '__main__':
     field = FieldDrawing(FIELD)
     field.draw_field()
-    ghost = Blinky()
-    while True:
-        y = randint(0, 30)
-        x = randint(0, 27)
-        if FIELD[y][x] == 0:
-            break
+    binky = Blinky()
+    pinky = Pinky()
+    inky = Inky()
+    clyde = Clyde()
+    # while True:
+    #     y = randint(0, 30)
+    #     x = randint(0, 27)
+    #     if FIELD[y][x] == 0:
+    #         break
 
-    ghost.position = (14, 4)
-    ghost.condition = ghost.WALKING
-    drawer = GhostDrawer(ghost)
-    ghost.move()
-    print(ghost.walking_path)
+    pinky.position = (14, 4)
+    binky.condition = pinky.WALKING
+    pinky.condition = pinky.WALKING
+    inky.condition = inky.WALKING
+    clyde.condition = clyde.WALKING
+    drawer = GhostDrawer(pinky)
+    drawer2 = GhostDrawer(binky)
+    drawer3 = GhostDrawer(inky)
+    drawer4 = GhostDrawer(clyde)
+    pinky.move()
+    print(pinky.walking_path)
     drawer.draw()
+    drawer2.draw()
+    drawer3.draw()
+    drawer4.draw()
     Window.mainloop()

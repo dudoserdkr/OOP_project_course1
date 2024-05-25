@@ -25,13 +25,25 @@ class Ghost(metaclass=ABCMeta):
         self.next_move = None
         self.target_coords = None
 
-        self.pacman = None # TODO: зробити, щоб пакман передався через ініт
+        self.pacman_direction = None
+        self.pacman_position = None
         self.pacman_last_position = None
-        self.blinky = None
+        self.blinky_position = None
 
         self.walking_path = []
         self.way_to_pacman = []
         self.condition = 1
+
+
+
+    def set_pacman_position(self, pacman_position):
+        self.pacman_position = pacman_position
+
+    def set_blinky_position(self, blinky_position):
+        self.blinky_position = blinky_position
+
+    def set_pacman_direction(self, pacman_direction):
+        self.pacman_direction = pacman_direction
 
 
     # region walking
@@ -60,16 +72,14 @@ class Ghost(metaclass=ABCMeta):
 
         elif self.condition == Ghost.HUNTING:  # TODO: розібратись з пакмен дірекшен
             if self.pacman_last_position is None:
-                y1, x1 = self.pacman.position
-                self.build_way_to_target(y1, x1)
-                self.pacman_last_position = deepcopy(self.pacman.position)
+                self.build_way_to_target(self.pacman_position, self.pacman_direction, self.blinky_position)
+                self.pacman_last_position = deepcopy(self.pacman_position)
 
-            elif self.pacman_last_position != self.pacman.position:
-                y1, x1 = self.pacman.position
-                self.build_way_to_target(y1, x1)
-                self.pacman_last_position = deepcopy(self.pacman.position)
+            elif self.pacman_last_position != self.pacman_position:
+                self.build_way_to_target(self.pacman_position, self.pacman_direction, self.blinky_position)
+                self.pacman_last_position = deepcopy(self.pacman_position)
 
-            elif self.pacman_last_position == self.pacman.position and self.way_to_pacman:
+            elif self.pacman_last_position == self.pacman_position and self.way_to_pacman:
                 self.next_move = self.way_to_pacman.pop(0)
             # else:
             #     raise AssertionError("У функції move щось пішло не так, це може було пов'язано з тим, що жодна з умов не виконалась. Можливо, що self.way_to_pacman став пустим")
@@ -88,7 +98,8 @@ class Ghost(metaclass=ABCMeta):
     # In this region there are methods, needed to finding the shortet way to the pacman
     # region Hunting
 
-    def build_way_to_target(self, pacman_y, pacman_x, pacman_direction=None, blinky_y=None, blinky_x=None) -> None:
+    def build_way_to_target(self, pacman_position: tuple, pacman_direction=None, blinky_position=None) -> None:
+        pacman_y, pacman_x = pacman_position
         self.way_to_pacman = self.path_to_trgt(pacman_y, pacman_x)
         self.next_move = self.way_to_pacman.pop(0) # TODO прибрати тут pop з self.way_to_pacman + перейменувати це поле
 
