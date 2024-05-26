@@ -46,6 +46,7 @@ class VisualPacMan(PacMan):
         self.sprite_dict = self.create_pacman_sprite_dict()
         self.possibility_dict = {"up": self.can_move_up, "down": self.can_move_down,
                                  "right": self.can_move_right, "left": self.can_move_left}
+        self.death_sprites_list = self.create_death_sprites_list()
 
         self.pacman_photo = None
         self.id = self.create_pacman()
@@ -67,7 +68,6 @@ class VisualPacMan(PacMan):
     def image_initiator(image):
         return ImageTk.PhotoImage(Image.open(image).resize((CELL_SIZE, CELL_SIZE), Image.Resampling.LANCZOS))
 
-
     def create_pacman(self):
         image = self.initial_pacman
         resized_image = image.resize((CELL_SIZE, CELL_SIZE), Image.Resampling.LANCZOS)
@@ -85,6 +85,12 @@ class VisualPacMan(PacMan):
         sprite_dict = {"up": up_dict, "down": down_dict, "left": left_dict, "right": right_dict}
 
         return sprite_dict
+
+    def create_death_sprites_list(self):
+        death_sprites_list = [self.death_1, self.death_2, self.death_3, self.death_4,
+                              self.death_5, self.death_6, self.death_7, self.death_8,
+                              self.death_9, self.death_10]
+        return death_sprites_list
 
     def move_up(self, event):
         if self.is_moving and self.current_move_proces == "up":
@@ -162,15 +168,15 @@ class VisualPacMan(PacMan):
         self.visualisation_death()
 
     def visualisation_death(self, counter=0):
-        N = 8
-        if counter >= N:
+        n = len(self.death_sprites_list)
+        if counter >= n:
             self.death()
             self.canvas.coords(self.id, self.canvas_position[0] + CELL_SIZE / 2, self.canvas_position[1] + CELL_SIZE / 2)
             self.canvas.itemconfig(self.id, image=self.initial_pm_resized)
             self.absolut_stop = False
             self.position = [23, 13]
             return
-        # TODO: change sprites like dict[counter] or list[counter]
+        self.canvas.itemconfig(self.id, image=self.death_sprites_list[counter])
         counter += 1
         Window.after(DELAY, lambda: self.visualisation_death(counter))
 
