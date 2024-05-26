@@ -17,15 +17,26 @@ class VisualPacMan(PacMan):
         # self.absolut_speed = DELAY / self.speed
         self.canvas_position = [13 * CELL_SIZE, 23 * CELL_SIZE]
         self.initial_pacman = Image.open("pictures/pm_initial.png")
-        self.initial_pm_resized = ImageTk.PhotoImage(Image.open("pictures/pm_initial.png").resize((CELL_SIZE, CELL_SIZE), Image.Resampling.LANCZOS))
-        self.down_open = ImageTk.PhotoImage(Image.open("pictures/pm_down_open.png").resize((CELL_SIZE, CELL_SIZE), Image.Resampling.LANCZOS))
-        self.down_closed = ImageTk.PhotoImage(Image.open("pictures/pm_down_closed.png").resize((CELL_SIZE, CELL_SIZE), Image.Resampling.LANCZOS))
-        self.up_open = ImageTk.PhotoImage(Image.open("pictures/pm_up_open.png").resize((CELL_SIZE, CELL_SIZE), Image.Resampling.LANCZOS))
-        self.up_closed = ImageTk.PhotoImage(Image.open("pictures/pm_up_closed.png").resize((CELL_SIZE, CELL_SIZE), Image.Resampling.LANCZOS))
-        self.right_open = ImageTk.PhotoImage(Image.open("pictures/pm_right_open.png").resize((CELL_SIZE, CELL_SIZE), Image.Resampling.LANCZOS))
-        self.right_closed = ImageTk.PhotoImage(Image.open("pictures/pm_right_closed.png").resize((CELL_SIZE, CELL_SIZE), Image.Resampling.LANCZOS))
-        self.left_open = ImageTk.PhotoImage(Image.open("pictures/pm_left_open.png").resize((CELL_SIZE, CELL_SIZE), Image.Resampling.LANCZOS))
-        self.left_closed = ImageTk.PhotoImage(Image.open("pictures/pm_left_closed.png").resize((CELL_SIZE, CELL_SIZE), Image.Resampling.LANCZOS))
+        self.initial_pm_resized = self.image_initiator("pictures/pm_initial.png")
+        self.down_open = self.image_initiator("pictures/pm_down_open.png")
+        self.down_closed = self.image_initiator("pictures/pm_down_closed.png")
+        self.up_open = self.image_initiator("pictures/pm_up_open.png")
+        self.up_closed = self.image_initiator("pictures/pm_up_closed.png")
+        self.right_open = self.image_initiator("pictures/pm_right_open.png")
+        self.right_closed = self.image_initiator("pictures/pm_right_closed.png")
+        self.left_open = self.image_initiator("pictures/pm_left_open.png")
+        self.left_closed = self.image_initiator("pictures/pm_left_closed.png")
+
+        self.death_1 = self.image_initiator("pictures/pacman1-removebg-preview.png")
+        self.death_2 = self.image_initiator("pictures/pacman2-removebg-preview.png")
+        self.death_3 = self.image_initiator("pictures/pacman3-removebg-preview.png")
+        self.death_4 = self.image_initiator("pictures/pacman4-removebg-preview.png")
+        self.death_5 = self.image_initiator("pictures/pacman5-removebg-preview.png")
+        self.death_6 = self.image_initiator("pictures/pacman6-removebg-preview.png")
+        self.death_7 = self.image_initiator("pictures/pacman7-removebg-preview.png")
+        self.death_8 = self.image_initiator("pictures/pacman8-removebg-preview.png")
+        self.death_9 = self.image_initiator("pictures/pacman9-removebg-preview.png")
+        self.death_10 = self.image_initiator('pictures/pacman10-removebg-preview.png')
 
         Window.bind('<Left>', self.move_left)
         Window.bind('<Right>', self.move_right)
@@ -51,6 +62,11 @@ class VisualPacMan(PacMan):
         if num % 2 == 0:
             return True
         return False
+
+    @staticmethod
+    def image_initiator(image):
+        return ImageTk.PhotoImage(Image.open(image).resize((CELL_SIZE, CELL_SIZE), Image.Resampling.LANCZOS))
+
 
     def create_pacman(self):
         image = self.initial_pacman
@@ -142,9 +158,8 @@ class VisualPacMan(PacMan):
     def visual_death(self, event):  # TODO: death visualisation, teleportation to start position
         self.stop_moving()
         self.absolut_stop = True
+        self.canvas.itemconfig(self.id, image=self.initial_pm_resized)
         self.visualisation_death()
-
-        # self.current_move_proces = None
 
     def visualisation_death(self, counter=0):
         N = 8
@@ -153,6 +168,7 @@ class VisualPacMan(PacMan):
             self.canvas.coords(self.id, self.canvas_position[0] + CELL_SIZE / 2, self.canvas_position[1] + CELL_SIZE / 2)
             self.canvas.itemconfig(self.id, image=self.initial_pm_resized)
             self.absolut_stop = False
+            self.position = [23, 13]
             return
         # TODO: change sprites like dict[counter] or list[counter]
         counter += 1
