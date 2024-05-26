@@ -5,7 +5,6 @@ class PacMan:
 
     START_POS = [23, 13]
     PACMAN_CURRENT_STATUS = True  # current life True/False
-    AVAILABLE_LIVES = 3
 
     def __init__(self):
         self.position = self.START_POS.copy()
@@ -15,6 +14,8 @@ class PacMan:
         self.speed = 1
 
         self.field = FIELD
+
+        self.available_lives = 3
 
     def can_move_left(self):
         curr_y, curr_x = self.position
