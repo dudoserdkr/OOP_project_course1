@@ -17,6 +17,7 @@ class VisualPacMan(PacMan):
         # self.absolut_speed = DELAY / self.speed
         self.canvas_position = [13 * CELL_SIZE, 23 * CELL_SIZE]
         self.initial_pacman = Image.open("pictures/pm_initial.png")
+        self.initial_pm_resized = ImageTk.PhotoImage(Image.open("pictures/pm_initial.png").resize((CELL_SIZE, CELL_SIZE), Image.Resampling.LANCZOS))
         self.down_open = ImageTk.PhotoImage(Image.open("pictures/pm_down_open.png").resize((CELL_SIZE, CELL_SIZE), Image.Resampling.LANCZOS))
         self.down_closed = ImageTk.PhotoImage(Image.open("pictures/pm_down_closed.png").resize((CELL_SIZE, CELL_SIZE), Image.Resampling.LANCZOS))
         self.up_open = ImageTk.PhotoImage(Image.open("pictures/pm_up_open.png").resize((CELL_SIZE, CELL_SIZE), Image.Resampling.LANCZOS))
@@ -141,15 +142,18 @@ class VisualPacMan(PacMan):
     def visual_death(self, event):  # TODO: death visualisation, teleportation to start position
         self.stop_moving()
         self.absolut_stop = True
+        self.visualisation_death()
 
         # self.current_move_proces = None
 
     def visualisation_death(self, counter=0):
-        N = 3
-        if counter > N:
+        N = 8
+        if counter >= N:
             self.death()
-            # TODO: visual teleport to start position
+            self.canvas.coords(self.id, self.canvas_position[0] + CELL_SIZE / 2, self.canvas_position[1] + CELL_SIZE / 2)
+            self.canvas.itemconfig(self.id, image=self.initial_pm_resized)
             self.absolut_stop = False
+            return
         # TODO: change sprites like dict[counter] or list[counter]
         counter += 1
         Window.after(DELAY, lambda: self.visualisation_death(counter))

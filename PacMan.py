@@ -46,4 +46,4 @@ class PacMan:
 
     def death(self):
         self.condition = False  # Means he is dead
-        self.position = self.START_POS
+        self.position = PacMan.START_POS

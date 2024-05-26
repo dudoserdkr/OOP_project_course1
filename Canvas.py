@@ -13,8 +13,8 @@ def create_canvas(window, field_width, field_height) -> tk.Canvas:
     )
 
     window.resizable(
-        width=False,
-        height=False
+        width=True,
+        height=True
     )
 
     canvas = tk.Canvas(
