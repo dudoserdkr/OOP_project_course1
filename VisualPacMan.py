@@ -174,11 +174,13 @@ class VisualPacMan(PacMan):
             self.canvas.coords(self.id, self.canvas_position[0] + CELL_SIZE / 2, self.canvas_position[1] + CELL_SIZE / 2)
             self.canvas.itemconfig(self.id, image=self.initial_pm_resized)
             self.absolut_stop = False
+            self.is_moving = False
             self.position = [23, 13]
             return
         self.canvas.itemconfig(self.id, image=self.death_sprites_list[counter])
         counter += 1
-        Window.after(DELAY, lambda: self.visualisation_death(counter))
+        Window.after(DELAY // 3, lambda: self.visualisation_death(counter))
+
 
 if __name__ == "__main__":
     m = FieldDrawing(FIELD)
