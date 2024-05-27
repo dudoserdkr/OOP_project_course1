@@ -29,9 +29,9 @@ class Observer:
             obs.set_pacman(self.pacman)
             if type(obs) == Inky :
                 obs.set_blinky(self.blinky)
-            if isinstance(obs, Ghost):
-                if obs.position == tuple(self.pacman.position):
-                    self.pacman.visual_death()
+            if isinstance(obs, Ghost):                          # TODO: ТУТ КРАШИТЬ, ЯКЩО ПАКМЕН ДОХНЕ, КРАЩЕ ЗАКОМЕНТУЙТЕ ПЕРЕД ТИМ, ЯК ПОКАЗУВАТИ КРЕНЕВИЧУ!!!!!!!!!!!!!
+                if obs.position == tuple(self.pacman.position): # TODO: НУ У СЕНСІ, ЩО ОБСЕРВЕР КРАШИТЬСЯ, ПІСЛЯ ЦЬОГО ГОСТИ І ПАКМЕН ПРАЦЮЮТЬ, АЛЕ НЕМА, НІ ЗВУКУ,
+                    self.pacman.visual_death()                  # TODO: НІ ПІДБИРАННЯ КОІНІ
 
         if not any([self.total.coin_list, self.total.tablet_list]):
             print("Got all coins and tablets!")
