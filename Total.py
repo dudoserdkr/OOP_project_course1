@@ -9,35 +9,40 @@ from Field import FIELD
 
 class Total:
     DELAY = 30
-    def __init__(self):
 
+    def __init__(self):
         self.coin_list = []
         self.tablet_list = []
         self.score = Score()
         self.pacman_pos = None
-        self.map = self.map()
+        self.map()
+        self.score_coin()
+        self.score_tablet()
+        self.scoreboard()
         self.observers = []
         self.empty_field = True
         self.vp = VisualPacMan()
 
-    def get_pacman_pos(self, pacman):
+    def get_pacman(self, pacman):
+        # TODO: stop using Get_pacman_pos and remake all up to this method
+        self.check_score_attributes(pacman)
+
+    def check_score_attributes(self, pacman):
         self.coin_check(pacman)
         self.tablet_check(pacman)
-
-
 
     def coin_tablet_total(self):
         if not self.coin_list and not self.tablet_list:
             self.coin()
             self.tablet_list_maker()
             self.tablet_drawer()
-            self.score_coin()  # Регистрация монет у наблюдателя Score
+            self.score_coin()
             self.score_tablet()
 
     def coin_check(self, pacman):
         for coin in self.coin_list:
             coin.change_status(pacman)
-            if coin.COIN_STATUS == False:
+            if not coin.COIN_STATUS:
                 try:
                     self.coin_list.remove(coin)
                 except ValueError:
@@ -46,14 +51,11 @@ class Total:
     def tablet_check(self, pacman):
         for tablet in self.tablet_list:
             tablet.change_status(pacman)
-            if tablet.TABLET_STATUS == False:
+            if not tablet.TABLET_STATUS:
                 try:
                     self.tablet_list.remove(tablet)
                 except ValueError:
                     pass
-            #print (self.tablet_list)
-
-
 
     @staticmethod
     def map():
@@ -62,9 +64,11 @@ class Total:
 
     def coin(self):
         for i in range(0, 28):
-            for e in range(0, 30): # TODO: FIELD_HEIGHT, FIELD_WIDTH
-                c = Coin([i, e]) # TODO: make few strings for if instead of one
-                if FIELD[e][i] == 0 and not (20 > e > 8 and 21 > i > 6) and not (i == 1 and e == 3) and not (i == 1 and e == 23) and not (i == 26 and e == 3) and not (i == 26 and e == 23) and not (e == 14):
+            for e in range(0, 30):
+                c = Coin([i, e])
+                if (FIELD[e][i] == 0 and not (20 > e > 8 and 21 > i > 6) and not (i == 1 and e == 3)
+                        and not (i == 1 and e == 23) and not (i == 26 and e == 3) and not
+                        (i == 26 and e == 23) and not (e == 14)):
                     self.coin_list.append(c)
         for t in self.coin_list:
             t.draw()
@@ -99,8 +103,3 @@ class Total:
     def pacman(self):
         self.coin_check(self.vp)
         self.tablet_check(self.vp)
-
-
-
-
-
