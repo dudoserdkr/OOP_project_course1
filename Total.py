@@ -5,7 +5,14 @@ from FieldDrawing import FieldDrawing
 from Score import Score
 from VisualScore import VisualScore
 from Field import FIELD
+
 from PIL import ImageTk, Image
+
+import pygame
+import threading
+
+pygame.init()
+pygame.mixer.init()
 
 
 class Total:
@@ -26,6 +33,7 @@ class Total:
         self.vp = VisualPacMan()
         self.lives = 3
         self.image_chooser()
+        self.sound_channel = pygame.mixer.Channel(1)
 
     def set_pacman(self, pacman):
         # TODO: stop using Get_pacman_pos and remake all up to this method
@@ -33,6 +41,19 @@ class Total:
         if self.vp.available_lives != self.lives:
             self.lives = self.vp.available_lives
             self.image_chooser()
+            self.sound()
+
+    def sound(self):
+        def play_sound():
+            if self.sound_channel.get_busy():
+                self.sound_channel.stop()
+
+            sound = pygame.mixer.Sound("sound/death.wav")
+            self.sound_channel.play(sound)
+            while self.sound_channel.get_busy():
+                pygame.time.delay(100)
+        threading.Thread(target=play_sound).start()
+
 
     def check_score_attributes(self, pacman):
         self.coin_check(pacman)
