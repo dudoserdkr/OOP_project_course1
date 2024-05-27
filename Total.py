@@ -26,6 +26,7 @@ class Total:
         self.vp = VisualPacMan()
         self.lives = 3
         self.image_chooser()
+
     def set_pacman(self, pacman):
         # TODO: stop using Get_pacman_pos and remake all up to this method
         self.check_score_attributes(pacman)
