@@ -5,7 +5,7 @@ from FieldDrawing import FieldDrawing
 from Score import Score
 from VisualScore import VisualScore
 from Field import FIELD
-
+from PIL import ImageTk, Image
 
 
 class Total:
@@ -24,7 +24,6 @@ class Total:
         self.observers = []
         self.empty_field = True
         self.vp = VisualPacMan()
-
     def set_pacman(self, pacman):
         # TODO: stop using Get_pacman_pos and remake all up to this method
         self.check_score_attributes(pacman)
@@ -33,6 +32,20 @@ class Total:
         self.coin_check(pacman)
         self.tablet_check(pacman)
 
+    def image_chooser(self):
+        photo = None
+        if self.vp.available_lives == 3:
+            print(3)
+            photo = Image.open("pictures/three_pacmans_first.png")
+        elif self.vp.available_lives == 2:
+            photo = Image.open("pictures/two_pacmans_first.png")
+        elif self.vp.available_lives == 1:
+            photo = Image.open("pictures/one_pacmans_first.png")
+        elif self.vp.available_lives == 0:
+            print(0)
+            photo = Image.open("pictures/no_pacmans_first.png")
+        self.vs.image_chooser(photo)
+
     def coin_tablet_total(self):
         if not self.coin_list and not self.tablet_list:
             self.coin()
@@ -40,6 +53,7 @@ class Total:
             self.tablet_drawer()
             self.score_coin()
             self.score_tablet()
+            self.image_chooser()
 
     def coin_check(self, pacman):
         for coin in self.coin_list:

@@ -24,6 +24,7 @@ class Observer:
     def main_loop(self):
         for obs in self.observers:
             obs.set_pacman(self.pacman)
+
             if type(obs) == Inky:
                 obs.set_blinky(self.blinky)
         if not any([self.total.coin_list, self.total.tablet_list]):
