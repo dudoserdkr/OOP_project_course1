@@ -24,8 +24,7 @@ class Observer:
     def main_loop(self):
         for obs in self.observers:
             obs.set_pacman(self.pacman)
-
-            if type(obs) == Inky:
+        if type(obs) == Inky:
                 obs.set_blinky(self.blinky)
         if not any([self.total.coin_list, self.total.tablet_list]):
             print("Got all coins and tablets!")
@@ -42,7 +41,6 @@ if __name__ == '__main__':
     c = Clyde()
     observer = Observer(total, total.vp, b)
     observer + total + i + p + c
-
 
     d1 = GhostDrawer(b)
     d2 = GhostDrawer(i)

@@ -27,6 +27,7 @@ class Total:
     def set_pacman(self, pacman):
         # TODO: stop using Get_pacman_pos and remake all up to this method
         self.check_score_attributes(pacman)
+        self.image_chooser()
 
     def check_score_attributes(self, pacman):
         self.coin_check(pacman)
@@ -35,16 +36,18 @@ class Total:
     def image_chooser(self):
         photo = None
         if self.vp.available_lives == 3:
-            print(3)
             photo = Image.open("pictures/three_pacmans_first.png")
+            photo_normal = photo.resize((120, 40), Image.Resampling.LANCZOS)
         elif self.vp.available_lives == 2:
             photo = Image.open("pictures/two_pacmans_first.png")
+            photo_normal = photo.resize((80, 40), Image.Resampling.LANCZOS)
         elif self.vp.available_lives == 1:
             photo = Image.open("pictures/one_pacmans_first.png")
+            photo_normal = photo.resize((40, 40), Image.Resampling.LANCZOS)
         elif self.vp.available_lives == 0:
-            print(0)
             photo = Image.open("pictures/no_pacmans_first.png")
-        self.vs.image_chooser(photo)
+            photo_normal = photo.resize((110, 40), Image.Resampling.LANCZOS)
+        self.vs.image_chooser(photo_normal)
 
     def coin_tablet_total(self):
         if not self.coin_list and not self.tablet_list:
@@ -53,7 +56,7 @@ class Total:
             self.tablet_drawer()
             self.score_coin()
             self.score_tablet()
-            self.image_chooser()
+
 
     def coin_check(self, pacman):
         for coin in self.coin_list:
