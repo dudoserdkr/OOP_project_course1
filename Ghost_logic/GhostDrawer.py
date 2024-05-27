@@ -70,7 +70,7 @@ class GhostDrawer:
         Window.after(40, self.draw)
 
     def change_picture_in_move(self, direction) -> None:
-        # TODO: УБРАТЬ ГАВНАКОД
+        # TODO: УБРАТЬ ГАВНАКОД (Фікситься переіменуванням спрайтів Up в Down і навпаки, мені просто в лом.)
         if direction == 'Up':
             direction = 'Down'
         elif direction == 'Down':

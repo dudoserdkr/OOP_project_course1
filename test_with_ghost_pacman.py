@@ -28,8 +28,6 @@ if __name__ == '__main__':
     c.condition = c.SPAWNING
 
 
-
-
     drawer = GhostDrawer(b)
     drawer1 = GhostDrawer(p)
     drawer2 = GhostDrawer(i)

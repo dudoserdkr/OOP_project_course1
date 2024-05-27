@@ -1,13 +1,12 @@
 from Window import Window
 import tkinter as tk
 from PIL import Image, ImageTk
-
+from Ghost_logic.Ghost import Ghost
 from Ghost_logic.Blinky import Blinky
 from Ghost_logic.Pinky import Pinky
 from Ghost_logic.Inky import Inky
 from Ghost_logic.Clyde import Clyde
 from Ghost_logic.GhostDrawer import GhostDrawer
-from random import randint
 from constants import DELAY
 from Total import Total
 from Canvas import CANVAS
@@ -28,12 +27,16 @@ class Observer:
     def main_loop(self):
         for obs in self.observers:
             obs.set_pacman(self.pacman)
-            if type(obs) == Inky and randint(0, 100) == 55:
+            if type(obs) == Inky :
                 obs.set_blinky(self.blinky)
-                del obs
+            if isinstance(obs, Ghost):
+                if obs.position == tuple(self.pacman.position):
+                    self.pacman.visual_death()
+
         if not any([self.total.coin_list, self.total.tablet_list]):
             print("Got all coins and tablets!")
             total.coin_tablet_total()
+
         if self.pacman.available_lives == 0:
             game_over_window = tk.Toplevel()
             game_over_window.title("Game Over")
@@ -57,7 +60,11 @@ if __name__ == '__main__':
     p = Pinky()
     c = Clyde()
     observer = Observer(total, total.vp, b)
-    observer + total + i + p + c
+    observer + total
+    observer + b
+    observer + i
+    observer + p
+    observer + c
 
 
     d1 = GhostDrawer(b)
