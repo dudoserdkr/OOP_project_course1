@@ -39,6 +39,7 @@ class Inky(Ghost):
                 return target_y, target_x
             else:
                 target_y, target_x = self.find_nearest_free_cell(target_y, target_x)
+
                 return target_y, target_x
         else:
             return blinky_y, blinky_x
@@ -47,6 +48,7 @@ class Inky(Ghost):
 
         pacman_y, pacman_x = pacman_position
         blinky_y, blinky_x = blinky_position
+        print(blinky_position)
 
         target_coordinates = self._calc_target_coordinates(
                                                            pacman_y, pacman_x,

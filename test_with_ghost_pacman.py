@@ -17,13 +17,11 @@ if __name__ == '__main__':
     p = Pinky()
     i = Inky()
     c = Clyde()
-    b.set_pacman_position(vp.position)
-    p.set_pacman_position(vp.position)
-    p.set_pacman_direction(vp.direction)
-    i.set_pacman_direction(vp.direction)
-    i.set_blinky_position(b.position)
-    i.set_pacman_position(vp.position)
-    c.set_pacman_position(vp.position)
+    b.set_pacman(vp)
+    p.set_pacman(vp)
+    i.set_pacman(vp)
+    i.set_blinky(b)
+    c.set_pacman(vp)
     b.condition = b.HUNTING
     p.condition = p.HUNTING
     i.condition = i.HUNTING

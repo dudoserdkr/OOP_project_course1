@@ -25,10 +25,9 @@ class Ghost(metaclass=ABCMeta):
         self.next_move = None
         self.target_coords = None
 
-        self.pacman_direction = None
-        self.pacman_position = None
+        self.blinky = None
+        self.pacman = None
         self.pacman_last_position = None
-        self.blinky_position = None
 
         self.walking_path = []
         self.way_to_pacman = []
@@ -36,14 +35,15 @@ class Ghost(metaclass=ABCMeta):
 
 
 
-    def set_pacman_position(self, pacman_position):
-        self.pacman_position = pacman_position
+    def set_pacman(self, pacman):
+        self.pacman = pacman
 
-    def set_blinky_position(self, blinky_position):
-        self.blinky_position = blinky_position
+    def set_blinky(self, blinky):
+        self.blinky = blinky
 
-    def set_pacman_direction(self, pacman_direction):
-        self.pacman_direction = pacman_direction
+    def get_blinky_poistion(self):
+        if self.blinky is not None:
+            return self.blinky.position
 
 
     # region walking
@@ -61,9 +61,31 @@ class Ghost(metaclass=ABCMeta):
     def move(self) -> None:
         if self.condition == Ghost.SCARED:
             self.random_move()
+
         elif self.condition == Ghost.WALKING: # TODO: Перевірити, чи не зламались інші привиди
             if self.walking_path:
-                self.next_move = self.walking_path.pop(0)
+                (possible_y, possible_x) = self.walking_path.pop(0)
+                curr_y, curr_x = self.position
+
+                if abs((curr_y + curr_x) - (possible_y + possible_x)) != 1:
+                    walking_path = self.get_walking_path()
+
+                    if self.position in walking_path:
+                        index = walking_path.index(self.position)
+
+                        if index == len(walking_path) - 1:
+                            return self.move()
+
+                        else:
+                            self.next_move = walking_path[index + 1]
+
+                    else:
+                        return self.move()
+                else:
+                    self.next_move = (possible_y, possible_x)
+
+
+
             else:
                 y, x = self.get_walking_start_coordinates()
                 path_to_walking_cell = self.path_to_trgt(y, x)
@@ -72,12 +94,12 @@ class Ghost(metaclass=ABCMeta):
 
         elif self.condition == Ghost.HUNTING:  # TODO: розібратись з пакмен дірекшен
             try:
-                if self.pacman_last_position != self.pacman_position:
-                    self.build_way_to_target(self.pacman_position, self.pacman_direction, self.blinky_position)
+                if self.pacman_last_position != self.pacman.position:
+                    self.build_way_to_target(self.pacman.position, self.pacman.direction, self.get_blinky_poistion())
                     self.next_move = self.way_to_pacman.pop(0)
-                    self.pacman_last_position = deepcopy(self.pacman_position)
+                    self.pacman_last_position = deepcopy(self.pacman.position)
 
-                elif self.pacman_last_position == self.pacman_position and self.way_to_pacman:
+                elif self.pacman_last_position == self.pacman.position:
                         self.next_move = self.way_to_pacman.pop(0)
             except IndexError:
                 self.next_move = deepcopy(self.position)

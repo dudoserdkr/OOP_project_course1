@@ -1,4 +1,5 @@
 from Ghost_logic.Ghost import Ghost
+from copy import deepcopy
 
 
 class Clyde(Ghost):
@@ -16,23 +17,31 @@ class Clyde(Ghost):
     def get_walking_start_coordinates(self):
         return 23, 6
 
-    def _calc_target_coordinates(self, pacman_position):
+    def check_distance_to_pacman(self, pacman_position) -> bool :
+        """
+        if clyde distance to pacman <= 8 returns True
+        else returns False
+        """
+
         pacman_y, pacman_x = pacman_position
         y, x = self.position
 
         distance_squared = (pacman_y - y) ** 2 + (pacman_x - x) ** 2
         radius_squared = 64
+
         if distance_squared <= radius_squared:
-            return self.get_walking_start_coordinates()
+            return True
         else:
-            return pacman_y, pacman_x
+            return None
 
-    def build_way_to_target(self, pacman_position: tuple, pacman_direction=None, blinky_position=None) -> None:
+    def move(self) -> None:
+        if self.check_distance_to_pacman(self.pacman.position) and self.condition == Ghost.HUNTING:
+            self.condition = Ghost.WALKING
+            super().move()
+            self.condition = Ghost.HUNTING
+        else:
+            super().move()
 
-        target_coordinates = self._calc_target_coordinates(pacman_position)
-
-        super().build_way_to_target(target_coordinates)
-        self.walking_path += self.get_walking_path()
 
 
             
