@@ -17,26 +17,26 @@ from Ghost_logic.Clyde import Clyde
 class GhostDrawer:
     DELTA = 2
     def __init__(self, ghost):
-        if type(ghost) == Blinky:
-            self.ghost_avatar = ImageTk.PhotoImage(Image.open(os.path.join(os.path.dirname(__file__), '..', 'pictures', 'Blinky.png')).resize((CELL_SIZE, CELL_SIZE), Image.Resampling.LANCZOS))
-        elif type(ghost) == Pinky:
+        ghost_images = {
+            Blinky: 'Blinky.png',
+            Pinky: 'Pinky.png',
+            Inky: 'Inky.png',
+            Clyde: 'Clyde.png'
+        }
+
+        if type(ghost) in ghost_images:
+            image_path = os.path.join(os.path.dirname(__file__), '..', 'pictures', ghost_images[type(ghost)])
             self.ghost_avatar = ImageTk.PhotoImage(
-                Image.open(os.path.join(os.path.dirname(__file__), '..', 'pictures', 'Pinky.png')).resize(
-                    (CELL_SIZE, CELL_SIZE), Image.Resampling.LANCZOS))
-        elif type(ghost) == Inky:
-            self.ghost_avatar = ImageTk.PhotoImage(
-                Image.open(os.path.join(os.path.dirname(__file__), '..', 'pictures', 'Inky.png')).resize(
-                    (CELL_SIZE, CELL_SIZE), Image.Resampling.LANCZOS))
-        elif type(ghost) == Clyde:
-            self.ghost_avatar = ImageTk.PhotoImage(
-                Image.open(os.path.join(os.path.dirname(__file__), '..', 'pictures', 'Clyde.png')).resize(
-                    (CELL_SIZE, CELL_SIZE), Image.Resampling.LANCZOS))
+                Image.open(image_path).resize((CELL_SIZE, CELL_SIZE), Image.Resampling.LANCZOS))
 
         self.canvas = CANVAS
         self.ghost = ghost
         self.avatar_id = self.canvas.create_image(23, 13, anchor=tk.NW, image=self.ghost_avatar)
         self.position = self.multiple_coords_by_cell_size(self.ghost.position)
         self.moving_direction = None
+        self.picture_name = self.ghost.__class__.__name__
+        self.moving_phase = '1'
+        self.ghost_avatar = None
 
     def draw(self):
         if self.ghost.next_move is None:
@@ -63,8 +63,32 @@ class GhostDrawer:
         curr_x += self.DELTA * dx
         self.position = curr_y, curr_x
 
+        self.change_picture_in_move(direction=moving_direction)
+
         self.canvas.coords(self.avatar_id, curr_x, curr_y)
-        Window.after(20, self.draw)
+
+        Window.after(40, self.draw)
+
+    def change_picture_in_move(self, direction) -> None:
+        # TODO: УБРАТЬ ГАВНАКОД
+        if direction == 'Up':
+            direction = 'Down'
+        elif direction == 'Down':
+            direction = 'Up'
+
+        if self.moving_phase == '1':
+            self.moving_phase = '2'
+        else:
+            self.moving_phase = '1'
+
+        image_name = self.picture_name + direction + self.moving_phase + ".png"
+
+        image_path = os.path.join(os.path.dirname(__file__), '..', 'pictures_ghost', image_name)
+        self.ghost_avatar = ImageTk.PhotoImage(
+            Image.open(image_path).resize((CELL_SIZE, CELL_SIZE), Image.Resampling.LANCZOS)
+        )
+        self.canvas.itemconfig(self.avatar_id, image=self.ghost_avatar)
+
 
     @staticmethod
     def multiple_coords_by_cell_size(coords: tuple) -> tuple:

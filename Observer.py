@@ -5,7 +5,7 @@ from Ghost_logic.Pinky import Pinky
 from Ghost_logic.Inky import Inky
 from Ghost_logic.Clyde import Clyde
 from Ghost_logic.GhostDrawer import GhostDrawer
-
+from random import randint
 from constants import DELAY
 from Total import Total
 
@@ -24,8 +24,9 @@ class Observer:
     def main_loop(self):
         for obs in self.observers:
             obs.set_pacman(self.pacman)
-            if type(obs) == Inky:
+            if type(obs) == Inky and randint(0, 100) == 55:
                 obs.set_blinky(self.blinky)
+                del obs
         if not any([self.total.coin_list, self.total.tablet_list]):
             print("Got all coins and tablets!")
             total.coin_tablet_total()
