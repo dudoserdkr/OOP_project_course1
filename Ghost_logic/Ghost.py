@@ -71,19 +71,16 @@ class Ghost(metaclass=ABCMeta):
                 self.next_move = self.walking_path.pop(0)
 
         elif self.condition == Ghost.HUNTING:  # TODO: розібратись з пакмен дірекшен
-            if self.pacman_last_position is None:
-                self.build_way_to_target(self.pacman_position, self.pacman_direction, self.blinky_position)
-                self.pacman_last_position = deepcopy(self.pacman_position)
+            try:
+                if self.pacman_last_position != self.pacman_position:
+                    self.build_way_to_target(self.pacman_position, self.pacman_direction, self.blinky_position)
+                    self.next_move = self.way_to_pacman.pop(0)
+                    self.pacman_last_position = deepcopy(self.pacman_position)
 
-            elif self.pacman_last_position != self.pacman_position:
-                self.build_way_to_target(self.pacman_position, self.pacman_direction, self.blinky_position)
-                self.pacman_last_position = deepcopy(self.pacman_position)
-
-            elif self.pacman_last_position == self.pacman_position and self.way_to_pacman:
-                self.next_move = self.way_to_pacman.pop(0)
-            # else:
-            #     raise AssertionError("У функції move щось пішло не так, це може було пов'язано з тим, що жодна з умов не виконалась. Можливо, що self.way_to_pacman став пустим")
-
+                elif self.pacman_last_position == self.pacman_position and self.way_to_pacman:
+                        self.next_move = self.way_to_pacman.pop(0)
+            except IndexError:
+                self.next_move = deepcopy(self.position)
 
     # region Scared
 
@@ -101,7 +98,6 @@ class Ghost(metaclass=ABCMeta):
     def build_way_to_target(self, pacman_position: tuple, pacman_direction=None, blinky_position=None) -> None:
         pacman_y, pacman_x = pacman_position
         self.way_to_pacman = self.path_to_trgt(pacman_y, pacman_x)
-        self.next_move = self.way_to_pacman.pop(0) # TODO прибрати тут pop з self.way_to_pacman + перейменувати це поле
 
     def path_to_trgt(self, y, x) -> list[list]:
         tempory_board = self._find_way_to_pacman(y, x)
@@ -144,7 +140,7 @@ class Ghost(metaclass=ABCMeta):
             for _ in range(FIELD_HEIGHT)
         ]
         pass
-        tempory_board[curr_y][curr_x] = None
+        tempory_board[curr_y][curr_x] = self.position
         visited_board[curr_y][curr_x] = 1
 
         queue = [
@@ -170,8 +166,7 @@ class Ghost(metaclass=ABCMeta):
                 for new_y, new_x in self._ghost_possible_moves(curr_y, curr_x)
             ]
 
-    @staticmethod
-    def _rebuild_path(tempory_board: list[list], pacman_y: int, pacman_x: int) -> list:
+    def _rebuild_path(self, tempory_board: list[list], pacman_y: int, pacman_x: int) -> list:
         """
         :param tempory_board: deepcopy of self.field, but in cell instead of 0 it contains tuple (y, x),
                                                           (y, x) -- coordinates of the cell we came from
@@ -184,17 +179,19 @@ class Ghost(metaclass=ABCMeta):
 
         current_position = (pacman_y, pacman_x)
 
-        while current_position is not None:
+        while current_position != self.position:
             rebuilded_path.append(current_position)
             x, y = current_position
             current_position = tempory_board[x][y]
+
+        pass
 
         """
         після циклу ми отримали повний шлях (список з кортежів, де кортежі вигляду (y, x)). Нам треба його перевенути
         щоб перша координати стала останньою, а остання першою. Також треба виключити у вже перевернутом списку першу координату.
         Бо перша координата - поточне положення привида, яке і так міститься в self.position
         """
-        return rebuilded_path[::-1][1:len(rebuilded_path)]
+        return rebuilded_path[::-1]
     # endregion
 
     @staticmethod

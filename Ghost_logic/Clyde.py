@@ -32,6 +32,7 @@ class Clyde(Ghost):
         target_coordinates = self._calc_target_coordinates(pacman_position)
 
         super().build_way_to_target(target_coordinates)
+        self.walking_path += self.get_walking_path()
 
 
             
