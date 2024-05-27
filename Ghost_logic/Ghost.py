@@ -8,6 +8,7 @@ class Ghost(metaclass=ABCMeta):
     SCARED = 0
     WALKING = 1
     HUNTING = 2
+    SPAWNING = 3
 
     def __init__(self) -> None:
         """
@@ -21,7 +22,7 @@ class Ghost(metaclass=ABCMeta):
         self.way_to_pacman: list of tuples (y, x) - current shorter way to pacman given by bfs alg
         """
         self.field = FIELD
-        self.position = self.START_POSITION
+        self.position = deepcopy(self.START_POSITION)
         self.next_move = None
         self.target_coords = None
 
@@ -82,6 +83,14 @@ class Ghost(metaclass=ABCMeta):
                         self.next_move = self.way_to_pacman.pop(0)
             except IndexError:
                 self.next_move = deepcopy(self.position)
+        elif self.condition == Ghost.SPAWNING:
+            if self.position == self.START_POSITION:
+                y, x = deepcopy(self.position)
+                y, x = y - 2, x
+                self.next_move = y, x
+            else:
+                self.next_move = deepcopy(self.START_POSITION)
+
 
     def build_walking_path(self) -> None:
         y, x = self.get_walking_start_coordinates()

@@ -3,6 +3,7 @@ from copy import deepcopy
 
 
 class Clyde(Ghost):
+    START_POSITION = (15, 11)
     def __init__(self):
         super().__init__()
 

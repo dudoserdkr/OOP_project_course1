@@ -169,7 +169,7 @@ class VisualPacMan(PacMan):
             print(self.position)
         return
 
-    def visual_death(self, event) -> None:  # TODO: death visualisation, teleportation to start position
+    def visual_death(self, event=None) -> None:  # TODO: death visualisation, teleportation to start position
         self.stop_moving()
         self.absolut_stop = True
         self.canvas.itemconfig(self.id, image=self.initial_pm_resized)

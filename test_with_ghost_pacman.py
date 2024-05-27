@@ -22,10 +22,10 @@ if __name__ == '__main__':
     i.set_pacman(vp)
     i.set_blinky(b)
     c.set_pacman(vp)
-    b.condition = b.HUNTING
-    p.condition = p.HUNTING
-    i.condition = i.HUNTING
-    c.condition = c.HUNTING
+    b.condition = b.SPAWNING
+    p.condition = p.SPAWNING
+    i.condition = i.SPAWNING
+    c.condition = c.SPAWNING
 
 
 

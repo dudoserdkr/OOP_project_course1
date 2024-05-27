@@ -2,6 +2,7 @@ from Ghost_logic.Ghost import Ghost
 
 
 class Pinky(Ghost):
+    START_POSITION = (15, 15)
     def __init__(self):
         super().__init__()
 

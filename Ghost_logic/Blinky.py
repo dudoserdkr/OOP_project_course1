@@ -2,6 +2,7 @@ from Ghost_logic.Ghost import Ghost
 
 
 class Blinky(Ghost):
+    START_POSITION = (15, 14)
     def __init__(self):
         super().__init__()
 
@@ -18,5 +19,4 @@ class Blinky(Ghost):
         return 5, 21
 
 if __name__ == '__main__':
-    x = [1, 2, 3]
-    print(x.index(4))
+    pass

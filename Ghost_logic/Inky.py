@@ -12,6 +12,7 @@ from Ghost_logic.Ghost import Ghost
 
 
 class Inky(Ghost):
+    START_POSITION = (15, 13)
     def __init__(self):
         super().__init__()
 

@@ -15,7 +15,7 @@ from Ghost_logic.Clyde import Clyde
 
 
 class GhostDrawer:
-    DELTA = 1
+    DELTA = 2
     def __init__(self, ghost):
         if type(ghost) == Blinky:
             self.ghost_avatar = ImageTk.PhotoImage(Image.open(os.path.join(os.path.dirname(__file__), '..', 'pictures', 'Blinky.png')).resize((CELL_SIZE, CELL_SIZE), Image.Resampling.LANCZOS))
@@ -100,10 +100,11 @@ if __name__ == '__main__':
     #         break
 
     pinky.position = (14, 4)
-    binky.condition = pinky.WALKING
-    pinky.condition = pinky.WALKING
-    inky.condition = inky.WALKING
-    clyde.condition = clyde.WALKING
+
+    binky.condition = pinky.SPAWNING
+    pinky.condition = pinky.SPAWNING
+    inky.condition = inky.SPAWNING
+    clyde.condition = clyde.SPAWNING
     drawer = GhostDrawer(pinky)
     drawer2 = GhostDrawer(binky)
     drawer3 = GhostDrawer(inky)
