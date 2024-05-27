@@ -5,6 +5,12 @@ from Coin import Coin
 from Canvas import CANVAS
 from constants import CELL_SIZE
 
+import pygame
+import threading
+
+pygame.init()
+pygame.mixer.init()
+
 class Tablet(Coin):
     CELL_SIZE = 20
 
@@ -19,6 +25,18 @@ class Tablet(Coin):
         self.id = None
         self._observers = []
         self.TABLET_STATUS = True
+        self.sound_channel = pygame.mixer.Channel(1)
+
+    def sound(self):
+        def play_sound():
+            if self.sound_channel.get_busy():
+                self.sound_channel.stop()
+
+            sound = pygame.mixer.Sound("sound/tablet.wav")
+            self.sound_channel.play(sound)
+            while self.sound_channel.get_busy():
+                pygame.time.delay(100)
+        threading.Thread(target=play_sound).start()
 
     def draw(self):
         self.id = CANVAS.create_image(self.tablet_position[0] + 10, self.tablet_position[1] + 10, image=self.resized)
@@ -40,5 +58,6 @@ class Tablet(Coin):
         if pacman.position == self.position and self.TABLET_STATUS:
             self.TABLET_STATUS = False
             Coin.SCORE += 50
+            self.sound()
             self.notify_observers()
             self.delete()
