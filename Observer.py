@@ -1,4 +1,6 @@
 from Window import Window
+import tkinter as tk
+from PIL import Image, ImageTk
 
 from Ghost_logic.Blinky import Blinky
 from Ghost_logic.Pinky import Pinky
@@ -8,6 +10,8 @@ from Ghost_logic.GhostDrawer import GhostDrawer
 
 from constants import DELAY
 from Total import Total
+from Canvas import CANVAS
+
 
 
 class Observer:
@@ -29,7 +33,19 @@ class Observer:
         if not any([self.total.coin_list, self.total.tablet_list]):
             print("Got all coins and tablets!")
             total.coin_tablet_total()
-
+        if self.pacman.available_lives == 0:
+            game_over_window = tk.Toplevel()
+            game_over_window.title("Game Over")
+            game_over_window.geometry("200x150+310+300")
+            photo = Image.open("pictures/game_over.jpg")
+            photo_normal = photo.resize((210, 150), Image.Resampling.LANCZOS)
+            photo_normal_tk = ImageTk.PhotoImage(photo_normal)
+            image_label = tk.Label(game_over_window, image=photo_normal_tk)
+            image_label.pack(side=tk.RIGHT, padx=(0, 20))
+            image_label.image = photo_normal_tk
+            game_over_window.eval('tk::PlaceWindow . center')
+            CANVAS.pack_forget()  #???
+            return
         Window.after(DELAY // 30, lambda: self.main_loop())
 
 
