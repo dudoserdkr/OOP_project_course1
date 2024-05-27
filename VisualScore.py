@@ -17,7 +17,6 @@ class VisualScore(Score, tk.Frame):
 
     def image_chooser(self, photo_normal):
         self.photo_normal_tk = ImageTk.PhotoImage(photo_normal)
-
         if hasattr(self, 'image_label'):
             self.image_label.pack_forget()
         if hasattr(self, 'image_label'):

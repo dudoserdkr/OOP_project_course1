@@ -24,10 +24,14 @@ class Total:
         self.observers = []
         self.empty_field = True
         self.vp = VisualPacMan()
+        self.lives = 3
+        self.image_chooser()
     def set_pacman(self, pacman):
         # TODO: stop using Get_pacman_pos and remake all up to this method
         self.check_score_attributes(pacman)
-        self.image_chooser()
+        if self.vp.available_lives != self.lives:
+            self.lives = self.vp.available_lives
+            self.image_chooser()
 
     def check_score_attributes(self, pacman):
         self.coin_check(pacman)
