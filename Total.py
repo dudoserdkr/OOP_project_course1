@@ -15,6 +15,7 @@ class Total:
         self.coin_list = []
         self.tablet_list = []
         self.score = Score()
+        self.vs = VisualScore()
         self.pacman_pos = None
         self.map()
         self.score_coin()
@@ -98,8 +99,7 @@ class Total:
             tab.register_observer(self.score)
 
     def scoreboard(self):
-        vs = VisualScore()
-        self.score.register_listener(vs)
+        self.score.register_listener(self.vs)
 
     def pacman(self):
         self.coin_check(self.vp)
