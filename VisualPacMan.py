@@ -126,6 +126,7 @@ class VisualPacMan(PacMan):
         if self.absolut_stop:
             return
         elif self.possibility_dict[direction]():
+            self.check_special_positions()
             self.stop_moving()
             self.is_moving = True
             self.current_move_proces = direction
