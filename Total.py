@@ -5,7 +5,7 @@ from FieldDrawing import FieldDrawing
 from Score import Score
 from VisualScore import VisualScore
 from Field import FIELD
-
+from PIL import ImageTk, Image
 
 
 class Total:
@@ -15,6 +15,7 @@ class Total:
         self.coin_list = []
         self.tablet_list = []
         self.score = Score()
+        self.vs = VisualScore()
         self.pacman_pos = None
         self.map()
         self.score_coin()
@@ -23,14 +24,35 @@ class Total:
         self.observers = []
         self.empty_field = True
         self.vp = VisualPacMan()
+        self.lives = 3
+        self.image_chooser()
 
     def set_pacman(self, pacman):
         # TODO: stop using Get_pacman_pos and remake all up to this method
         self.check_score_attributes(pacman)
+        if self.vp.available_lives != self.lives:
+            self.lives = self.vp.available_lives
+            self.image_chooser()
 
     def check_score_attributes(self, pacman):
         self.coin_check(pacman)
         self.tablet_check(pacman)
+
+    def image_chooser(self):
+        photo = None
+        if self.vp.available_lives == 3:
+            photo = Image.open("pictures/three_pacmans_first.png")
+            photo_normal = photo.resize((120, 40), Image.Resampling.LANCZOS)
+        elif self.vp.available_lives == 2:
+            photo = Image.open("pictures/two_pacmans_first.png")
+            photo_normal = photo.resize((80, 40), Image.Resampling.LANCZOS)
+        elif self.vp.available_lives == 1:
+            photo = Image.open("pictures/one_pacmans_first.png")
+            photo_normal = photo.resize((40, 40), Image.Resampling.LANCZOS)
+        elif self.vp.available_lives == 0:
+            photo = Image.open("pictures/no_pacmans_first.png")
+            photo_normal = photo.resize((110, 40), Image.Resampling.LANCZOS)
+        self.vs.image_chooser(photo_normal)
 
     def coin_tablet_total(self):
         if not self.coin_list and not self.tablet_list:
@@ -39,6 +61,7 @@ class Total:
             self.tablet_drawer()
             self.score_coin()
             self.score_tablet()
+
 
     def coin_check(self, pacman):
         for coin in self.coin_list:
@@ -98,8 +121,7 @@ class Total:
             tab.register_observer(self.score)
 
     def scoreboard(self):
-        vs = VisualScore()
-        self.score.register_listener(vs)
+        self.score.register_listener(self.vs)
 
     def pacman(self):
         self.coin_check(self.vp)
