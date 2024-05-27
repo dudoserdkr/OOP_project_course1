@@ -18,6 +18,7 @@ class Ghost:
         self.pic_up_2 = pic_up_2
         self.pic_down_1 = pic_down_1
         self.pic_down_2 = pic_down_2
+
     def move_left(self):
         (curr_y, curr_x) = self.position
         if self.map[curr_y + 1][curr_x] == 1:

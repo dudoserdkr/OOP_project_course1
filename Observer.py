@@ -15,31 +15,18 @@ class Observer:
 
     def main_loop(self):
         for obs in self.observers:
-            obs.get_pacman_pos(self.pacman)
+            obs.get_pacman(self.pacman)
         if not any([self.total.coin_list, self.total.tablet_list]):
-            print("Все монеты и таблетки собраны!")
+            print("Got all coins and tablets!")
             total.coin_tablet_total()
 
         Window.after(DELAY // 30, lambda: self.main_loop())
 
 
-
-
-
-
 if __name__ == '__main__':
     total = Total()
     observer = Observer(total, total.vp)
-    # Додали підписника який отримує інфу про позицію пакмана, подімна штука буде і з гостами
-
-
     observer.main_loop()
-
     observer + total
-    total.pacman()
-    #total.coin_tablet_total()
-    total.score_coin()
-    total.score_tablet()
-    total.scoreboard()
 
     Window.mainloop()

@@ -1,5 +1,8 @@
 import tkinter as tk
+
 from Score import Score
+
+
 class VisualScore(Score, tk.Frame):
     def __init__(self, master=None):
         Score.__init__(self)
