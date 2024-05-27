@@ -7,6 +7,7 @@ from VisualScore import VisualScore
 from Field import FIELD
 
 
+
 class Total:
     DELAY = 30
 
@@ -23,7 +24,7 @@ class Total:
         self.empty_field = True
         self.vp = VisualPacMan()
 
-    def get_pacman(self, pacman):
+    def set_pacman(self, pacman):
         # TODO: stop using Get_pacman_pos and remake all up to this method
         self.check_score_attributes(pacman)
 
