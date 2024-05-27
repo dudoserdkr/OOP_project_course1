@@ -64,28 +64,7 @@ class Ghost(metaclass=ABCMeta):
 
         elif self.condition == Ghost.WALKING: # TODO: Перевірити, чи не зламались інші привиди
             if self.walking_path:
-                (possible_y, possible_x) = self.walking_path.pop(0)
-                curr_y, curr_x = self.position
-
-                if abs((curr_y + curr_x) - (possible_y + possible_x)) != 1:
-                    walking_path = self.get_walking_path()
-
-                    if self.position in walking_path:
-                        index = walking_path.index(self.position)
-
-                        if index == len(walking_path) - 1:
-                            return self.move()
-
-                        else:
-                            self.next_move = walking_path[index + 1]
-
-                    else:
-                        return self.move()
-                else:
-                    self.next_move = (possible_y, possible_x)
-
-
-
+                self.next_move = self.walking_path.pop(0)
             else:
                 y, x = self.get_walking_start_coordinates()
                 path_to_walking_cell = self.path_to_trgt(y, x)
@@ -103,6 +82,13 @@ class Ghost(metaclass=ABCMeta):
                         self.next_move = self.way_to_pacman.pop(0)
             except IndexError:
                 self.next_move = deepcopy(self.position)
+
+    def build_walking_path(self) -> None:
+        y, x = self.get_walking_start_coordinates()
+        path_to_walking_cell = self.path_to_trgt(y, x)
+        self.walking_path = path_to_walking_cell + self.get_walking_path()
+        self.next_move = self.walking_path.pop(0)
+
 
     # region Scared
 

@@ -48,7 +48,6 @@ class Inky(Ghost):
 
         pacman_y, pacman_x = pacman_position
         blinky_y, blinky_x = blinky_position
-        print(blinky_position)
 
         target_coordinates = self._calc_target_coordinates(
                                                            pacman_y, pacman_x,
